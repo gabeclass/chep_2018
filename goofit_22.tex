@@ -1,0 +1,66 @@
+% !TeX program = lualatex
+% !TeX encoding = utf8
+
+\documentclass{beamer}
+% \documentclass[aspectratio=169, smaller]{beamer}
+
+\usepackage{amsmath}
+\usepackage[T1]{fontenc}
+
+% This is the "normal" package based install
+\usepackage{lhcb_presentation/package}
+
+\usepackage{units}
+\usepackage{booktabs}
+\usepackage{ulem}
+\usepackage{comment}
+
+
+% This should be appendtographicspath if using package method
+\appendtographicspath{{./images/}}
+
+
+\errorcontextlines 10000
+
+\title{A Python upgrade to the GooFit package for parallel fitting}
+
+\author{Henry Schreiner\textcolor{lhcbRed}{\inst{1 }}}
+\institute{\inst{1} University of Cincinnati}
+\date{\today}
+
+% Auto-fullscreen
+\lhcbhypersetup
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{Intro}
+\subsection{Intro}
+\begin{frame}{Intro}
+
+  \begin{block}{Details}
+    \begin{itemize}
+    	\item More details
+   \end{itemize}
+  \end{block}
+  
+\end{frame}
+
+
+\backupbegin
+\section{Backup}
+
+\subsection{Backup slides}
+\begin{frame}{Backup slide}
+\end{frame}
+
+\begin{frame}{Code}
+	Code and presentations (as CI artifacts) available at: \url{https://gitlab.cern.ch/hschrein/lhcb_presentation}
+\end{frame}
+
+\backupend
+
+\end{document}
