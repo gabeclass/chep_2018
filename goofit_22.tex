@@ -73,7 +73,7 @@
 \subsection{GooFit Introduction}
 \begin{frame}{Intro}
     \begin{center}
-    \includegraphics[width=0.5\textwidth]{GooFitSnake}
+    \includegraphics[width=0.7\textwidth]{GooFitSnake}
     \end{center}
 
     A GPU and OpenMP fitting package designed to look like RooFit, designed for performance.
@@ -511,8 +511,46 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
         \item Observables, Variables can be registered in the constructor
     \end{itemize}
 \end{block}
-
 \end{frame}
+
+%EventType D0 K- pi+ pi+ pi-
+%D0[D]{K*(892)bar0{K-,pi+},rho(770)0{pi+,pi-}}    0     1 0.1 0      0 0.1
+%D0[P]{K*(1410)bar0{K-,pi+},rho(770)0{pi+,pi-}}   0 0.059 0.1 0 -0.370 0.1
+%...
+%K(1460)bar-_mass  0 1460 1 1000 2000
+%K(1460)bar-_width 0  250 1 100  500
+%...
+%a(1)(1260)+::Spline::Min 0.18412
+%a(1)(1260)+::Spline::Max 1.86869
+%a(1)(1260)+::Spline::N 34
+%a(1)(1260)+::Spline::Gamma::0 2 0.00 0
+%a(1)(1260)+::Spline::Gamma::1 2 0.000133698 0
+%a(1)(1260)+::Spline::Gamma::2 2 0.000784943 0
+
+\section{AmpGen2GooFit}
+\subsection{AmpGen Syntax}
+\begin{frame}{AmpGen Syntax}
+    \begin{block}{\href{https://gitlab.cern.ch/lhcb/Gauss/tree/LHCBGAUSS-1058.AmpGenDev/Gen/AmpGen}{AmpGen} by Tim Evens}
+    \begin{itemize}
+        \item Successor to MINT3
+        \item Includes easy to use and read grammar
+    \end{itemize}
+\end{block}
+\end{frame}
+
+\subsection{DecayLanguage}
+\begin{frame}{DecayLanguage}
+
+    \begin{block}{\href{https://decaylanguage.readthedocs.io/en/latest/}{DecayLanguage}: BETA}
+        \begin{itemize}
+            \item Python package implementing AmpGen's syntax
+            \item Reads in and understands decay chains
+            \item Example usage - Future potential
+            \item Can output GooFit code!
+        \end{itemize}
+    \end{block}
+\end{frame}
+
 
 
 \backupbegin
