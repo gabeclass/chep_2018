@@ -1,0 +1,44 @@
+\ProvidesPackage{lhcb_presentation/ACATpackage}
+% This is used if you want to include this as a subpackage instead of installing it or working in the same directory
+
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+
+\hypersetup{
+pdfdisplaydoctitle = true,
+pdfpagemode = FullScreen,
+pdftoolbar = false
+}
+
+% Settings
+\graphicspath{{./lhcb_presentation/}}
+% WARNING: This must be part of the path - use appendtographicspath
+% or include it in your graphics path!
+
+\mode<presentation>
+
+\RequirePackage{lhcb_presentation/beamerinnerthemeACAT}
+\RequirePackage{lhcb_presentation/beamerouterthemeACAT}
+\RequirePackage{lhcb_presentation/beamercolorthemeACAT}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]  
+
+\makeatletter
+\newcommand\appendtographicspath[1]{%
+   \g@addto@macro\Ginput@path{#1}%
+}
+\makeatother
+
+\newcommand{\backupbegin}{
+	\newcounter{finalframe}
+	\setcounter{finalframe}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+	\setcounter{framenumber}{\value{finalframe}}
+}
+
+\newcommand\githublogo{\raisebox{-.4ex}[1ex]{\includegraphics[height=2.2ex]{logos/githubshape.pdf}}}
+\newcommand{\github}[1]{\href{https://github.com/#1}{\githublogo\texttt{/#1}}}
+
+\mode<all>
