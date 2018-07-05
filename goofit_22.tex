@@ -40,7 +40,8 @@
     stringstyle=\color{green!50!black},
     keywordstyle=\color{orange},
     commentstyle=\color{white!50!black},
-    emph={GooFit,Observable,DataSet,Variable,FitManager,
+    emph={GooFit,Observable,DataSet,UnbinnedDataSet,BinnedDataSet,
+          Variable,FitManager,
           goofit,GaussianPdf,DalitzPlotter},
     emphstyle=\color{blue!50!black}
 }
@@ -373,8 +374,15 @@
 
         \begin{block}{CMake and normal directory}
             \begin{itemize}
-                \item Build with \texttt{GOOFIT\_PYTHON=ON} (\texttt{Auto} by default)
-                \item Build directory should be in path (or install)
+                \item Use \texttt{GOOFIT\_PYTHON=ON} (\texttt{Auto})
+                \item Build directory should be in path
+            \end{itemize}
+        \end{block}
+
+        \begin{block}{Also available in repository}
+            \begin{itemize}
+                \item 12 of 13 C++ examples converted
+                \item Interactive notebook examples
             \end{itemize}
         \end{block}
     \end{columns}
@@ -393,7 +401,13 @@ Observable x{"x", 0, 10};
 Variable mu{"mu", 1};
 Variable sigma{"sigma", 1, 0, 10};
 GaussianPdf gauss{"gauss", &x, &mu, &sigma};
-// Setup for DataSet ds not shown
+UnbinnedDataSet ds{x};
+
+std::mt19937 gen;
+std::normal_distribution<double> d{1, 2.5};
+for(size_t i=0; i<100000; i++)
+    ds.addEvent(d(gen));
+
 gauss.fitTo(&ds);
 
 std::cout << mu << std::endl;
@@ -401,13 +415,19 @@ std::cout << mu << std::endl;
         \column{.5\textwidth}
         \begin{lstlisting}[language=Python] 
 from goofit import *
-
+import numpy as np
 
 x = Observable("x", 0, 10)
 mu = Variable("mu", 1)
 sigma = Variable("sigma", 1, 0, 10)
 gauss = GaussianPdf("gauss", x, mu, sigma)
-# Setup for DataSet ds not shown
+ds = UnbinnedDataSet(x)
+
+data = np.random.normal(1, 2.5, (100000,1))
+ds.from_matrix(data, filter=True)
+
+
+
 gauss.fitTo(ds)
 
 print(mu)
@@ -436,10 +456,7 @@ print(mu)
         \end{block}
         \column{.5\textwidth}
         \begin{lstlisting}[language=Python]
-import numpy as np 
-npdata = np.random.normal(1, 2.5, (100000,1))
-ds = UnbinnedDataSet(xvar)
-ds.from_matrix(npdata, filter=True)
+ds.from_matrix(numpydata, filter=True)
         \end{lstlisting}
         \begin{block}{DataSet: from Python}
             \begin{itemize}
@@ -447,11 +464,21 @@ ds.from_matrix(npdata, filter=True)
                 \item Option to filter invalid values
             \end{itemize}
         \end{block}
+        \begin{lstlisting}[language=Python]
+ds = BinnedDataSet(x, y, z)
+ds.addEvent(xval, yval, zval)
+        \end{lstlisting}
+        \begin{block}{Arguments}
+            \begin{itemize}
+                \item Automatic conversion for lists
+                \item Variable length arguments supported
+            \end{itemize}
+        \end{block}
     \end{columns}
 \end{frame}
 
 \subsection{Simulation}
-\begin{frame}[fragile]{Simulation}
+\begin{frame}[fragile]{Simulation and Evaluation}
     \begin{columns}[c]
         \column{.5\textwidth}
         \begin{lstlisting}[language=Python]
@@ -468,9 +495,10 @@ gauss.setData(grid)
         \begin{lstlisting}[language=Python]
 gauss.fillMCDataSimple(1000000)
         \end{lstlisting}
-        \begin{block}{MC generation 1D}
+        \begin{block}{1D MC generation}
             \begin{itemize}
                 \item Simple way to produce MC
+                \item Initial MC on CPU, evaluation on GPU
             \end{itemize}
         \end{block}
         \column{.5\textwidth}
@@ -478,7 +506,7 @@ gauss.fillMCDataSimple(1000000)
 dplt = DalitzPlotter(prod, dp)
 arr = dplt.make2D()        
         \end{lstlisting}
-        \begin{block}{Amp3Body}
+        \begin{block}{Amp3Body (TD)}
             \begin{itemize}
                 \item Can produce simple 3-body Toy MC
                 \item DalitzPlotter functionality planned for merge into Amp3Body
@@ -489,12 +517,23 @@ arr = dplt.make2D()
 aa.setGenerationOffset(0);
 aa.GenerateSig(1000000);
         \end{lstlisting}
-        \begin{block}{Amp4Body}
+        \begin{block}{Amp4Body (TD)}
             \begin{itemize}
-                \item Full GPU Toy MC using MCBooster
+                \item Full GPU Toy MC using \href{https://github.com/GooFit/MCBooster}{MCBooster}
             \end{itemize}
         \end{block}
+    \end{columns}
+\end{frame}
 
+\subsection{Evaluation Example}
+\begin{frame}{Evaluation Example}
+    \begin{columns}
+        \column{.5\textwidth}%
+        \only<1>{\includegraphics[width=\textwidth, trim={100 0 65 0}]{GooFitPlot1.png}}%
+        \only<2>{\includegraphics[width=\textwidth, trim={100 0 65 0}]{GooFitPlot2.png}}%
+        \column{.5\textwidth}%
+        \only<1>{\includegraphics[width=\textwidth, trim={65 0 100 0}]{GooFitSliders1.png}}%
+        \only<2>{\includegraphics[width=\textwidth, trim={65 0 100 0}]{GooFitSliders2.png}}%
     \end{columns}
 \end{frame}
 
@@ -502,17 +541,11 @@ aa.GenerateSig(1000000);
 \begin{frame}[fragile]{Documentation}
     \begin{columns}[c]
         \column{.5\textwidth}
-        \begin{lstlisting}[language=Python]
-import goofit
-goofit.MyPdf
-        \end{lstlisting}
-        % TODO: Add documentation output
         \begin{block}{Documentation}
             \begin{itemize}
                 \item Documentation exported to Jupyter
             \end{itemize}
         \end{block}
-        \column{.5\textwidth}
 %\begin{lstlisting}[language=C++]
 %.def_static("help", []() {
 %    return HelpPrinter(MyPdf_docs);
@@ -527,13 +560,16 @@ goofit.MyPdf
                 \item Attached to class in PyBind11
             \end{itemize}
         \end{block}
+        \column{.5\textwidth}
+
+        \includegraphics[width=\textwidth]{GooFitDocsExample}
     \end{columns}
 \end{frame}
 
 \section{Indexing}
 
-\subsection{Indexing in device functions}
-\begin{frame}[fragile]{Indexing in device functions}
+\subsection{Device Indexing}
+\begin{frame}[fragile]{Indexing in Device Functions}
 \begin{lstlisting}[language=C++]
 __device__ fptype f_device(fptype* evt, ParameterContainer& pc) {
     int id       = pc.getObservable(0);
@@ -572,40 +608,31 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
 \end{block}
 \end{frame}
 
+\section{AmpGen}
+\subsection{Intro to AmpGen}
+\begin{frame}{Introduction to AmpGen}
+%    \begin{lstlisting}
 %EventType D0 K- pi+ pi+ pi-
-%D0[D]{K*(892)bar0{K-,pi+},rho(770)0{pi+,pi-}}    0     1 0.1 0      0 0.1
-%D0[P]{K*(1410)bar0{K-,pi+},rho(770)0{pi+,pi-}}   0 0.059 0.1 0 -0.370 0.1
-%...
+%D0[D]{K*(892)bar0{K-,pi+},rho(770)0{pi+,pi-}} 0 1 0.1 0 0 0.1
 %K(1460)bar-_mass  0 1460 1 1000 2000
 %K(1460)bar-_width 0  250 1 100  500
-%...
 %a(1)(1260)+::Spline::Min 0.18412
 %a(1)(1260)+::Spline::Max 1.86869
-%a(1)(1260)+::Spline::N 34
-%a(1)(1260)+::Spline::Gamma::0 2 0.00 0
-%a(1)(1260)+::Spline::Gamma::1 2 0.000133698 0
-%a(1)(1260)+::Spline::Gamma::2 2 0.000784943 0
-
-\section{AmpGen2GooFit}
-\subsection{AmpGen Syntax}
-\begin{frame}[fragile]{AmpGen Syntax}
-    \begin{lstlisting}
-EventType D0 K- pi+ pi+ pi-
-D0[D]{K*(892)bar0{K-,pi+},rho(770)0{pi+,pi-}} 0 1 0.1 0 0 0.1
-K(1460)bar-_mass  0 1460 1 1000 2000
-K(1460)bar-_width 0  250 1 100  500
-a(1)(1260)+::Spline::Min 0.18412
-a(1)(1260)+::Spline::Max 1.86869
-    \end{lstlisting}
+%    \end{lstlisting}
+    \begin{columns}
+        \column{.6\textwidth}
+        \begin{block}{\href{https://gitlab.cern.ch/lhcb/Gauss/tree/LHCBGAUSS-1058.AmpGenDev/Gen/AmpGen}{AmpGen} by Tim Evans}
+            \begin{itemize}
+                \item Successor to MINT3: JIT compiler for amplitudes
+                \item Includes easy to use and read grammar
+                \item Inside LHCb framework, but can build standalone 
+                \item Includes pure Python ctypes interface
+            \end{itemize}
+        \end{block}
+        \column{.4\textwidth}
+        \includegraphics[width=\textwidth]{LineExample}
+    \end{columns}
     
-    \begin{block}{\href{https://gitlab.cern.ch/lhcb/Gauss/tree/LHCBGAUSS-1058.AmpGenDev/Gen/AmpGen}{AmpGen} by Tim Evans}
-    \begin{itemize}
-        \item Successor to MINT3: JIT compiler for amplitudes
-        \item Includes easy to use and read grammar
-        \item Inside LHCb framework, but can build standalone 
-        \item Includes pure Python ctypes interface
-    \end{itemize}
-\end{block}
 \end{frame}
 
 \subsection{DecayLanguage}
@@ -616,16 +643,50 @@ a(1)(1260)+::Spline::Max 1.86869
             \begin{itemize}
                 \item Python package implementing AmpGen's syntax
                 \item Reads in and understands decay chains
-                \item Still \emph{Beta}: future potential
+                \item Still in beta: future potential
                 \item Can output GooFit code!
+                \item On \href{https://pypi.org/project/decaylanguage/}{PyPI} and \href{https://decaylanguage.readthedocs.io/en/latest/}{ReadTheDocs}
             \end{itemize}
         \end{block}
         \column{.4\textwidth}
-        \includegraphics[width=\textwidth]{LineExample}
+        $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \href{https://inspirehep.net/record/1644791}{[Eur.Phys.J. C78 (2018)]}
+        
+        \begin{itemize}
+            \item AmpGen model: 222 lines
+            \item GooFit model: 1314 lines
+        \end{itemize}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Questions?}
+\section{Final Words}
+\subsection{Summary}
+\begin{frame}{Summary}
+    \begin{columns}[t]
+        \column{.333333\textwidth}
+        \begin{block}{GooFit Python}
+            \begin{itemize}
+                \item Easy to compose model
+                \item Easy to manipulate model
+                \item Pythonic interface
+            \end{itemize}
+        \end{block}
+        \column{.333333\textwidth}
+        \begin{block}{GooFit Indexing}
+            \begin{itemize}
+                \item Simpler to add PDFs
+                \item Faster on GPU
+                \item More flexibility for developers
+            \end{itemize}
+        \end{block}
+        \column{.333333\textwidth}
+        \begin{block}{AmpGen/DecayLanguage}
+            \begin{itemize}
+                \item Syntax for amplitudes
+                \item Beta Python package
+                \item Future potential
+            \end{itemize}
+        \end{block}
+    \end{columns}
 \end{frame}
 
 
@@ -634,9 +695,6 @@ a(1)(1260)+::Spline::Max 1.86869
 
 \subsection{Backup slides}
 
-\begin{frame}{Code}
-	Code and presentations (as CI artifacts) available at: \url{https://gitlab.cern.ch/hschrein/lhcb_presentation}
-\end{frame}
 
 \backupend
 
