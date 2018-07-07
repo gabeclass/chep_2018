@@ -87,7 +87,19 @@
     \end{itemize}
 
     \begin{center}
-        \huge Python \textbullet\ Indexing \textbullet\ AmpGen
+        \huge Python
+        \textbullet\
+        Inde%
+        \begin{tikzpicture}[overlay]
+            \node at (0,0) [below] {\small (simpler functions)};
+        \end{tikzpicture}%
+        xing
+        \textbullet\
+        Amp%
+        \begin{tikzpicture}[overlay]
+            \node at (-.02,0) [below] {\small (amplitude grammar)};
+        \end{tikzpicture}%
+        Gen
     \end{center}
 
 \end{frame}
@@ -644,6 +656,7 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
                 \item Python package implementing AmpGen's syntax
                 \item Reads in and understands decay chains
                 \item Still in beta: future potential
+                \item Expands lines, produces pictures
                 \item Can output GooFit code!
                 \item On \href{https://pypi.org/project/decaylanguage/}{PyPI} and \href{https://decaylanguage.readthedocs.io/en/latest/}{ReadTheDocs}
             \end{itemize}
@@ -687,6 +700,11 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
             \end{itemize}
         \end{block}
     \end{columns}
+
+    \begin{center}
+        Need help? Use GitHub issues, Gitter, or
+        \href{mailto:hschrein@cern.ch}{hschrein@cern.ch}
+    \end{center}
 \end{frame}
 
 
