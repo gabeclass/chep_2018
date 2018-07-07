@@ -580,6 +580,113 @@ aa.GenerateSig(1000000);
 
 \section{Indexing}
 
+
+\subsection{New Indexing System}
+\begin{frame}{New Indexing System}
+    \begin{columns}[c]
+        \column{.5\textwidth}
+        \begin{tikzpicture}[xscale=.7, yscale=.6,
+            first/.style={fill=blue!10!white},
+            second/.style={fill=red!10!white},
+            ind/.style={font=\bf}]
+            \begin{scope}
+                \node at (0,0.5) [left] {Observable ID};
+                \draw [first, ind] (0,0) rectangle (1,1) node [midway] {1};
+                \draw [first] (1,0) rectangle (2,1) node [midway] {0};
+                \draw [second, ind] (2,0) rectangle (3,1) node [midway] {1};
+                \draw [second] (3,0) rectangle (4,1) node [midway] {1};
+            \end{scope}
+            \begin{scope}[yshift=-1.2cm]
+                \node at (0,0.5) [left] {Parameters};
+                \draw [first, ind] (0,0) rectangle (1,1) node [midway] {2};
+                \draw [first] (1,0) rectangle (2,1) node [midway] {3.0};
+                \draw [first] (2,0) rectangle (3,1) node [midway] {2.0};
+                \draw [second, ind] (3,0) rectangle (4,1) node [midway] {1};
+                \draw [second] (4,0) rectangle (5,1) node [midway] {3.0};
+            \end{scope}
+            \begin{scope}[yshift=-2.4cm]
+                \node at (0,0.5) [left] {Constants};
+                \draw [first, ind] (0,0) rectangle (1,1) node [midway] {0};
+                \draw [second, ind] (1,0) rectangle (2,1) node [midway] {1};
+                \draw [second] (2,0) rectangle (3,1) node [midway] {3.14};
+            \end{scope}
+            \begin{scope}[yshift=-3.6cm]
+                \node at (0,0.5) [left] {Normalization factors};
+                \draw [first, ind] (0,0) rectangle (1,1) node [midway] {1};
+                \draw [first] (1,0) rectangle (2,1) node [midway] {1.0};
+                \draw [second, ind] (2,0) rectangle (3,1) node [midway] {1};
+                \draw [second] (3,0) rectangle (4,1) node [midway] {1.0};
+            \end{scope}
+        \end{tikzpicture}
+
+        \begin{block}{ParameterContainer}
+            \begin{itemize}
+                \item Nice API for PDFs
+                \item Handles initialization/updates
+                \item Can work past unknown components
+            \end{itemize}
+        \end{block}
+
+        \column{.5\textwidth}
+
+        \begin{tikzpicture}
+            \begin{axis}[
+                    ylabel={Time per iteration [ms]},
+                    xtick={1,2,3},
+                    xticklabels={$\pi\pi\pi^0$ toy 1,$\pi\pi\pi^0$ toy 5,Dalitz},
+                    legend style={at={(0.5,-0.2),font=\footnotesize},
+                    anchor=north,legend columns=-1},
+                    width=\textwidth,
+                    height=.65\textwidth,
+                    ybar,
+                    bar width=7pt,
+                    axis x line=bottom,
+                    axis y line=left,
+                    ymin=0,
+                    ymax=270,
+                    xmin=.6,
+                    xmax=3.4
+                ]
+                % 2.0 GPU
+                \addplot coordinates {
+                    (1,12.322)
+                    (2,57.259)
+                    (3,38.811)
+                };
+                % 2.2 GPU
+                \addplot coordinates {
+                    (1,10.412)
+                    (2,45.358)
+                    (3,29.275)
+                };
+                \addplot coordinates {
+                    (1,51.99)
+                    (2,235.69)
+                    (3,52.223)
+                };
+                \addplot coordinates {
+                    (1,59.615)
+                    (2,269.16)
+                    (3,79.276)
+                };
+                \legend{2.0 GPU,2.2 GPU,2.0 GPU,2.2 GPU}
+            \end{axis}
+        \end{tikzpicture}
+
+
+        \begin{block}{Performance}
+            \begin{itemize}
+                \item Faster on CUDA
+                \item A bit slower on OpenMP
+                \item Further optimizations possible
+            \end{itemize}
+        \end{block}
+
+
+
+    \end{columns}
+\end{frame}
+
 \subsection{Device Indexing}
 \begin{frame}[fragile]{Indexing in Device Functions}
 \begin{lstlisting}[language=C++]
@@ -642,7 +749,7 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
             \end{itemize}
         \end{block}
         \column{.4\textwidth}
-        \includegraphics[width=\textwidth]{LineExample}
+        \includegraphics[width=\textwidth, trim={50 0 50 0}]{LineExample}
     \end{columns}
     
 \end{frame}
@@ -654,6 +761,7 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
         \begin{block}{\href{https://decaylanguage.readthedocs.io/en/latest/}{DecayLanguage}: BETA}
             \begin{itemize}
                 \item Python package implementing AmpGen's syntax
+                \item Powerful PDG particle class included
                 \item Reads in and understands decay chains
                 \item Still in beta: future potential
                 \item Expands lines, produces pictures
@@ -674,6 +782,9 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
 \section{Final Words}
 \subsection{Summary}
 \begin{frame}{Summary}
+    \begin{center}
+        \includegraphics[width=0.65\textwidth, trim={100 550 300 200}]{GooFitSnake}
+    \end{center}
     \begin{columns}[t]
         \column{.333333\textwidth}
         \begin{block}{GooFit Python}
@@ -711,7 +822,24 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
 \backupbegin
 \section{Backup}
 
-\subsection{Backup slides}
+\subsection{Status of 2.2}
+\begin{frame}{Status of 2.2}
+    GooFit 2.2 release delayed by critical bug in 4-body Amplitude calculation.    
+\end{frame}
+
+\subsection{New Features}
+\begin{frame}{New Features Since 2.1}
+    \begin{itemize}
+        \item Better MPI testing (2.2)
+        \item Many new tests, in Catch2 (2.2)
+        \item Dropped max limits for indexes (2.2)
+        \item Large internal rename and new inheritance tree (2.2)
+        \item 3-body fit fractions (2.1.3)
+        \item Pip 10 support (2.1.3)
+        \item Live notebook examples and support (2.1.2)
+        \item DalitzPlotter (2.1.1)
+    \end{itemize}
+\end{frame}
 
 
 \backupend
