@@ -348,7 +348,7 @@
   \begin{block}{Recent History}
     \begin{itemize}
       \item 2.0: New build system, C++11, and 4-body time dependent analyses support
-      \item 2.1: Python bindings
+      \item 2.1: Python bindings using Pybind11
       \item 2.2: New indexing (and lots of Python improvements)
     \end{itemize}
   \end{block}
@@ -395,6 +395,7 @@
             \begin{itemize}
                 \item 12 of 13 C++ examples converted
                 \item Interactive notebook examples
+                \item Can be built ROOTless
             \end{itemize}
         \end{block}
     \end{columns}
@@ -459,6 +460,7 @@ print(mu)
             \begin{itemize}
                 \item Variables provide property access
                 \item Variables can be printed
+                \item Getters and Setters supported too
             \end{itemize}
         \end{block}
         \begin{block}{Memory}
@@ -470,7 +472,7 @@ print(mu)
         \begin{lstlisting}[language=Python]
 ds.from_matrix(numpydata, filter=True)
         \end{lstlisting}
-        \begin{block}{DataSet: from Python}
+        \begin{block}{DataSet: from/to Python}
             \begin{itemize}
                 \item DataSets can be read in/out to 2D buffers
                 \item Option to filter invalid values
@@ -701,10 +703,9 @@ __device__ fptype f_device(fptype* evt, ParameterContainer& pc) {
 __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
 \end{lstlisting}
 
-\begin{block}{ParameterContainer}
+\begin{block}{Device functions}
     \begin{itemize}
-        \item Simpler, easier device functions
-        \item Faster on GPU, (currently) marginally slower on CPU
+        \item Simpler, easier than before
     \end{itemize}
 \end{block}
 \end{frame}
@@ -830,6 +831,7 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
 \subsection{New Features}
 \begin{frame}{New Features Since 2.1}
     \begin{itemize}
+        \item CLI11 1.6 (2.2)
         \item Better MPI testing (2.2)
         \item Many new tests, in Catch2 (2.2)
         \item Dropped max limits for indexes (2.2)
@@ -840,7 +842,6 @@ __device__ device_function_ptr ptr_to_Gaussian = device_Gaussian;
         \item DalitzPlotter (2.1.1)
     \end{itemize}
 \end{frame}
-
 
 \backupend
 
