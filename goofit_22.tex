@@ -583,7 +583,7 @@ aa.GenerateSig(1000000);
 \section{Indexing}
 
 
-\subsection{New Indexing System}
+\subsection{Indexing System}
 \begin{frame}{New Indexing System}
     \begin{columns}[c]
         \column{.5\textwidth}
@@ -671,12 +671,14 @@ aa.GenerateSig(1000000);
                     (2,269.16)
                     (3,79.276)
                 };
-                \legend{2.0 GPU,2.2 GPU,2.0 GPU,2.2 GPU}
+                \legend{2.0 GPU,2.2 GPU,2.0 CPU,2.2 CPU}
             \end{axis}
+            \node at(0,2.8) [right] {\small Dual Xeon E5-2680};
+            \node at(3.4,2.8) [right] {\small 28 2.4~Ghz};
+            \node at(0,2.3) [right] {\small NVIDIA P100};
         \end{tikzpicture}
 
-
-        \begin{block}{Performance}
+        \begin{block}{Performance: 2.0 to 2.2}
             \begin{itemize}
                 \item Faster on CUDA
                 \item A bit slower on OpenMP
