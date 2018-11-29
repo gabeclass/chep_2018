@@ -44,7 +44,9 @@
 %
 \section{Introduction}
 \label{intro}
-Write an introduction here.
+High Energy Physics experiments around the world are producing record amounts of data. Existing tools, such as the RooFit fitting framework, provide flexible and powerful abstractions for building distributions to fit that data with, but this power comes at a cost; this is computationally expensive, and often only runs on a single core. Modern architectures provide many cores, as well as new computing paradigms, such as GPUs, that provide significant new potential for high performance computations, but are non-trivial for the physicst to use to build distributions in the description style familiar to him.
+
+GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit developed at the University of Cincinnati in 2013. (TODO: REF) It provided composition of model pieces in the same manor as RooFit, but was powered by GPUs. It also provided ready to use models The GooFit 2.0 release added a simpler build process, making it easy for users to pick up and run GooFit code.
 
 \section{Python Bindings}
 \label{sec-py}
