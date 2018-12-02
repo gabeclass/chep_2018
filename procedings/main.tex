@@ -7,9 +7,10 @@
 \usepackage{tikz}
 \usepackage{units}
 \usepackage{pgfplots}
-\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.pathreplacing, patterns}
 \pgfplotsset{compat=1.12}
 
+\graphicspath{{./images/}}
 
 % maybe use: https://github.com/olivierverdier/python-latex-highlighting/blob/master/pythonhighlight.sty
 
@@ -55,13 +56,14 @@
 \label{intro}
 High Energy Physics experiments around the world are producing record amounts of data. Existing tools, such as the RooFit fitting framework, provide flexible and powerful abstractions for building distributions to fit that data with, but this power comes at a cost; this is computationally expensive, and often only runs on a single core. Modern architectures provide many cores, as well as new computing paradigms, such as GPUs, that provide significant new potential for high performance computations, but are non-trivial for the physicst to use to build distributions in the description style familiar to him.
 
-GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit developed at the University of Cincinnati in 2013. \todo{REF} It provided composition of model pieces in the same manor as RooFit, but was powered by GPUs. It also provided ready to use models for common Probability Distribution Functions (PDFs), as well as specialized three body physics models. The GooFit 2.0 release \todo{REF} added a simpler build process, making it easy for users to pick up and run GooFit code, and combined work from several forks, providing more physics models and more features.
+GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit developed at the University of Cincinnati in 2013~\cite{lib:GooFit:main}. It provided composition of model pieces in the same manor as RooFit, but was powered by GPUs. It also provided ready to use models for common Probability Distribution Functions (PDFs), as well as specialized three body physics models. The GooFit 2.0 release~\cite{lib:GooFit} added a simpler build process, making it easy for users to pick up and run GooFit code, and combined work from several forks, providing more physics models and more features.
 
-The next two releases of GooFit, bringing us up to version 2.2, will be the topic of our discussion. The most notable new change is the addition of fully functioning Python bindings, allowing users to code the composition of PDFs in a dynamic scripting language, opening up new possibilities for quick modeling and interesting interactions with other Python libraries, such as for plotting. Other changes include a new indexing system, which makes PDFs easier to write, and provides some small performance benefits on GPUs. A prototype for a uniform decay language, shared with other packages such as AmpGen \todo{REF}, provides a powerful new frontend that can be used for user code.
+The next two releases of GooFit, bringing us up to version 2.2, will be the topic of our discussion. The most notable new change is the addition of fully functioning Python bindings, allowing users to code the composition of PDFs in a dynamic scripting language, opening up new possibilities for quick modeling and interesting interactions with other Python libraries, such as for plotting. Other changes include a new indexing system, which makes PDFs easier to write, and provides some small performance benefits on GPUs. A prototype for a uniform decay language, shared with other packages such as AmpGen~\todo{REF}, provides a powerful new frontend that can be used for user code.
 
 \section{GooFit Performance}
 
-\begin{figure}
+\begin{figure*}
+	\centering
 \begin{tikzpicture}[xscale=1.1,
 goonode/.style={fill=black, circle, minimum size=1.25ex, inner sep=0},
 version/.style={above=1ex, black},
@@ -110,9 +112,10 @@ every node/.style={font=\footnotesize}
 \end{tikzpicture}%
 \caption{Timeline of GooFit development. Key points are version 2.0: New build system, C++11, and 4-body time dependent analyses support; version 2.1: Python bindings using Pybind11; and version 2.2: new indexing (and lots of Python improvements).}
 \label{fig-history}
-\end{figure}
+\end{figure*}
 
-\begin{figure}
+\begin{figure}[h]
+	\centering
 	\begin{tikzpicture}[scale=.8]
 	\begin{loglogaxis}[
 	axis x line*=bottom,
@@ -142,23 +145,10 @@ every node/.style={font=\footnotesize}
 	\label{fig-pipipi0}
 \end{figure}
 
-\begin{table}
-	\begin{tabular}{r|r|l}
-	2 Cores & Core 2 Duo &  \unit[1,159]{s} \\
-	GPU & GeForce GTX 1050 Ti &  \unit[86.4]{s} \\
-	GPU & Tesla K40 & \unit[64.0]{s} \\
-	MPI & Tesla K40 $\times 2$ & \unit[39.3]{s} \\
-	GPU & Tesla P100 &  \unit[20.3]{s}
-	% 3 cards: 34.8 s
-	% 2 K-40s: 39.3 s
-	\end{tabular}
-\caption{This is a caption}
-\label{tab-pipipi0}
-\end{table}
-
-\begin{figure}
+\begin{figure}[h]
+	\centering
 	\begin{tikzpicture}[scale=.8]
-    \begin{loglogaxis}[
+	\begin{loglogaxis}[
 	axis x line*=bottom,
 	axis y line*=left,
 	xlabel={OpenMP threads on 24 core Xeon},
@@ -186,14 +176,17 @@ every node/.style={font=\footnotesize}
 \end{figure}
 
 \begin{table}
-				\begin{tabular}{r|r|l}
-		2 Cores & Core 2 Duo &  \unit[738]{s} \\
-		GPU & GeForce GTX 1050 Ti & \unit[60.3]{s} \\
-		GPU & Tesla K40 & \unit[96.6]{s} \\
-		MPI & Tesla K40 $\times 2$ & \unit[54.3]{s} \\
-		GPU & Tesla P100 & \unit[23.5]{s}
+	\centering
+	\begin{tabular}{c|c|c|c}
+		Number of Cores & Hardware & Pipipi0 & ZachFit \\
+		\hline
+2 Cores &           Core 2 Duo & \unit[1,159]{s} & \unit[738]{s} \\
+GPU &  GeForce GTX 1050 Ti & \unit[86.4]{s}& \unit[60.3]{s}   \\
+GPU &            Tesla K40 & \unit[64.0]{s} & \unit[60.3]{s} \\
+MPI \& GPU & Tesla K40 $\times 2$ & \unit[39.3]{s} & \unit[54.3]{s} \\
+GPU &           Tesla P100 & \unit[20.3]{s}& \unit[23.5]{s} \\
 	\end{tabular}
-\caption{This is a caption}
+\caption{GPU performance comparison.}
 \label{tab-zachfit}
 \end{table}
 
@@ -252,7 +245,45 @@ The
 	\label{fig-indexing-classic}
 \end{figure}
 
-The indexing system has been updated to provide improved GPU performance. The indexing system in GooFit needs to track the Variables, Observables, and any constants used by any combination of PDFs. This information is packed into four separate buffers. The primary index buffer provides either a constant integer value, or contains the index into one of the three subsequent buffers which contained events, parameters, or floating-precision constants\cite{GooFit}. For simple PDFs, performance is not an issue due to the amount of memory. The indexing memory stays small, and can be cached quickly. As more PDFs are involved in the fit, complexity is added causing the indexing memory to get quite large with requests becoming random. For GPUs this is a problematic issue which causes a large overhead reading similar blocks of memory from global memory due to the size of the L1 cache. Using the new indexing system improves this access pattern by having memory reads behave coherently. A side effect of the new indexing system is duplicated memory for a specific Variable or Observable. The performance improvement at the cost of this duplicating memory has a larger impact on performance by providing a linear memory access for each PDF.
+\begin{figure}
+\begin{tikzpicture}[xscale=.7, yscale=.6,
+first/.style={pattern=horizontal lines, pattern color=blue!30!white},
+second/.style={pattern=crosshatch, pattern color=red!30!white},
+ind/.style={font=\bf}]
+\begin{scope}
+\node at (0,0.5) [left] {Observable ID};
+\draw [first, ind] (0,0) rectangle (1,1) node [midway] {1};
+\draw [first] (1,0) rectangle (2,1) node [midway] {0};
+\draw [second, ind] (2,0) rectangle (3,1) node [midway] {1};
+\draw [second] (3,0) rectangle (4,1) node [midway] {1};
+\end{scope}
+\begin{scope}[yshift=-1.2cm]
+\node at (0,0.5) [left] {Parameters};
+\draw [first, ind] (0,0) rectangle (1,1) node [midway] {2};
+\draw [first] (1,0) rectangle (2,1) node [midway] {3.0};
+\draw [first] (2,0) rectangle (3,1) node [midway] {2.0};
+\draw [second, ind] (3,0) rectangle (4,1) node [midway] {1};
+\draw [second] (4,0) rectangle (5,1) node [midway] {3.0};
+\end{scope}
+\begin{scope}[yshift=-2.4cm]
+\node at (0,0.5) [left] {Constants};
+\draw [first, ind] (0,0) rectangle (1,1) node [midway] {0};
+\draw [second, ind] (1,0) rectangle (2,1) node [midway] {1};
+\draw [second] (2,0) rectangle (3,1) node [midway] {3.14};
+\end{scope}
+\begin{scope}[yshift=-3.6cm]
+\node at (0,0.5) [left] {Normalization factors};
+\draw [first, ind] (0,0) rectangle (1,1) node [midway] {1};
+\draw [first] (1,0) rectangle (2,1) node [midway] {1.0};
+\draw [second, ind] (2,0) rectangle (3,1) node [midway] {1};
+\draw [second] (3,0) rectangle (4,1) node [midway] {1.0};
+\end{scope}
+\end{tikzpicture}
+\caption{An example of the new GooFit indexing system.}
+\label{fig-indexing-new}
+\end{figure}
+
+The indexing system has been updated to provide improved GPU performance. The indexing system in GooFit needs to track the Variables, Observables, and any constants used by any combination of PDFs. This information is packed into four separate buffers. The primary index buffer provides either a constant integer value, or contains the index into one of the three subsequent buffers which contained events, parameters, or floating-precision constants~\cite{lib:GooFit:main}. For simple PDFs, performance is not an issue due to the amount of memory. The indexing memory stays small, and can be cached quickly. As more PDFs are involved in the fit, complexity is added causing the indexing memory to get quite large with requests becoming random. For GPUs this is a problematic issue which causes a large overhead reading similar blocks of memory from global memory due to the size of the L1 cache. Using the new indexing system improves this access pattern by having memory reads behave coherently. A side effect of the new indexing system is duplicated memory for a specific Variable or Observable. The performance improvement at the cost of this duplicating memory has a larger impact on performance by providing a linear memory access for each PDF.
 
 The second improvement with the indexing system provides is developing and testing PDFs as well by providing a method for testing that indices specific in PDF construction match with the device function. Helper functions have been added allowing for registered Variables and Observables to also return the index that needs to be used within the device function. This provides a simpler mechanism for creating and debugging new PDFs by verifying indices in the device function. 
 
@@ -273,12 +304,68 @@ An additional change provided with the indexing update is the ParameterContainer
 	\label{table:1}
 \end{table}
 
+\begin{figure}
+	 \begin{tikzpicture}
+	\begin{axis}[
+	ylabel={Time per iteration [ms]},
+	xtick={1,2,3},
+	xticklabels={$\pi\pi\pi^0$ toy 1,$\pi\pi\pi^0$ toy 5,Dalitz},
+	legend style={at={(0.5,-0.2),font=\footnotesize},
+		anchor=north,legend columns=-1},
+	width=.5\textwidth,
+	height=.35\textwidth,
+	ybar,
+	bar width=7pt,
+	axis x line=bottom,
+	axis y line=left,
+	ymin=0,
+	ymax=270,
+	xmin=.6,
+	xmax=3.4
+	]
+	% 2.0 GPU
+	\addplot coordinates {
+		(1,12.322)
+		(2,57.259)
+		(3,38.811)
+	};
+	% 2.2 GPU
+	\addplot coordinates {
+		(1,10.412)
+		(2,45.358)
+		(3,29.275)
+	};
+	\addplot coordinates {
+		(1,51.99)
+		(2,235.69)
+		(3,52.223)
+	};
+	\addplot coordinates {
+		(1,59.615)
+		(2,269.16)
+		(3,79.276)
+	};
+	\legend{2.0 GPU,2.2 GPU,2.0 CPU,2.2 CPU}
+	\end{axis}
+	\node at(0,2.8) [right] {\small Dual Xeon E5-2680};
+	\node at(3.4,2.8) [right] {\small 28 2.4~Ghz};
+	\node at(0,2.3) [right] {\small NVIDIA P100};
+	\end{tikzpicture}
+	\label{figure-newindexspeed}
+	\caption{New indexing system.}
+\end{figure}
+
 Table \ref{table:1} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2. The results show that providing more coherent memory reads improves the performance by a factor of 2.4 in the large event case, with a 82\% improvement with a small dataset.
 
 \section{A Uniform Decay Language}
 \label{sec-ampgen}
 More here.
 
+\begin{figure}
+	\includegraphics[width=.5\textwidth]{LineExample}
+	\label{figure-ampgen}
+	\caption{Example of decay from DecayLanugage.}
+\end{figure}
 
 \section{Summary}
 \label{sec-summary}
@@ -333,28 +420,28 @@ More here.
 %\end{table}
 %
 % BibTeX or Biber users please use (the style is already called in the class, ensure that the "woc.bst" style is in your local directory)
-% \bibliography{name or your bibliography database}
+\bibliography{goofit}
 %
 % Non-BibTeX users please use
 %
-\begin{thebibliography}{}
+%\begin{thebibliography}{}
+%%
+%% and use \bibitem to create references.
+%%
 %
-% and use \bibitem to create references.
+%\bibitem{GooFit}
+%R Andreassen et al.
+%\textit{GooFit: A library for massively parallelising maximum-likelihood fits}
+%Phys.: Conf. Ser. 513 052003 (2014)
 %
-
-\bibitem{GooFit}
-R Andreassen et al.
-\textit{GooFit: A library for massively parallelising maximum-likelihood fits}
-Phys.: Conf. Ser. 513 052003 (2014)
-
-\bibitem{RefJ}
-% Format for Journal Reference
-Journal Author, Journal \textbf{Volume}, page numbers (year)
-% Format for books
-\bibitem{RefB}
-Book Author, \textit{Book title} (Publisher, place, year) page numbers
-% etc
-\end{thebibliography}
+%\bibitem{RefJ}
+%% Format for Journal Reference
+%Journal Author, Journal \textbf{Volume}, page numbers (year)
+%% Format for books
+%\bibitem{RefB}
+%Book Author, \textit{Book title} (Publisher, place, year) page numbers
+%% etc
+%\end{thebibliography}
 
 \end{document}
 
