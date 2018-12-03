@@ -372,7 +372,7 @@ ind/.style={font=\bf}]
 
 A key feature of GooFit is the indexing system; this is the system GooFit uses to allow the PDF and amplitude code access shared values. The original system, shown in figure~\ref{fig-indexing-classic}, just stores values once, but then uses a double lookup system to find the correct index to read. The new system, shown in figure~\ref{fig-indexing-new}, uses a little preprocessing to store values in a structure that no longer requires a double lookup, saving a significant amount of time in some cases.
 
-The indexing system redesign in GooFit 2.2 targets improved GPU performance. The indexing system in GooFit needs to track the Variables, Observables, and any constants used by any combination of PDFs. This information is packed into four separate buffers. The primary index buffer provides either a constant integer value, or contains the index into one of the three subsequent buffers which contained events, parameters, or floating-precision constants~\cite{lib:GooFit:main}. For simple PDFs, performance is not an issue due to the amount of memory. The indexing memory stays small, and can be cached quickly. As more PDFs are involved in the fit, complexity is added causing the indexing memory to get quite large with requests becoming random. For GPUs this causes a large overhead reading similar blocks of memory from global memory due to the size of the L1 cache. Using the new indexing system improves this access pattern by having memory reads behave coherently. A side effect of the new indexing system is duplicated memory for a specific Variable or Observable. The performance improvement at the cost of this duplicating memory has a larger impact on performance by providing a linear memory access for each PDF.
+The indexing system redesign in GooFit 2.2 targets improved GPU performance. The indexing system in GooFit needs to track the Variables, Observables, and any constants used by any combination of PDFs. This information is packed into four separate buffers. The primary index buffer provides either a constant integer value, or contains the index into one of the three subsequent buffers which contained events, parameters, or floating-precision constants~\cite{lib:GooFit:main}. For a NVIDIA Tesla P100 GPU, 16 blocks of 32-byte sized segments specific to a thread can be cached. Two problems occur with this 32 byte memory segment that affects GPU performance. First is that if only 8 of 32 bytes are used, then the memory transaction is wasteful. Second, the segments may need to be loaded multiple times during the execution of a PDF, which is unsatisfactory for GPU performance. Using the new indexing system improves this access pattern by having memory reads behave coalesced. A side effect of the new indexing system is duplicated memory for a specific Variable or Observable. The performance improvement at the cost of this duplicating memory has a larger impact on performance by providing better memory access coherence for each PDF.
 
 The second improvement with the indexing system provides is developing and testing PDFs as well by providing a method for testing that indices specific in PDF construction match with the device function. Helper functions have been added allowing for registered Variables and Observables to also return the index that needs to be used within the device function. This provides a simpler mechanism for creating and debugging new PDFs by verifying indices in the device function. 
 
@@ -383,10 +383,10 @@ An additional change provided with the indexing update is the ParameterContainer
 	\begin{tabular}{c|c|c}
 			 & GooFit 2.0 (s) & GooFit 2.2 (s) \\
 		\hline
-			Dalitz [100,000 events] & 3.12221 & 1.70781 \\
-			Daltiz [10,000,000 events] & 317.347 & 130.282 \\
+			Dalitz [97,501 events] & 0.81223 & 0.810105 \\
+			Daltiz [9,750,100 events] & 60.5463 & 44.8483 \\
 	\end{tabular}
-	\caption{Performance comparisons of GooFit 2.0 versus GooFit 2.2 including the new indexing system.}
+	\caption{Comparison of a 3-body decay of GooFit 2.0 versus GooFit 2.2 on an Intel E5-2680 v4 (Broadwell) chip with a NVIDIA Tesla P100. With over 9 million events, the performance improved over 35\% using the new indexing system. }
 	\label{table:1}
 \end{table}
 
@@ -439,7 +439,7 @@ An additional change provided with the indexing update is the ParameterContainer
 	\caption{New indexing system compared on a Dual Xeon E5-2680 with 28 cores running at 2.4 Ghz, with an NVIDIA P100 GPU. Performance gains can be seen on the GPUs when upgrading to the new indexing system in GooFit 2.2, along with slight CPU penalties.}
 \end{figure}
 
-Table \ref{table:1} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2. The results show that providing more coherent memory reads improves the performance by a factor of 2.4 in the large event case, with a 82\% improvement with a small dataset.
+Table \ref{table:1} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. show that providing more coherent memory reads improves the performance by a factor of 2.4 in the large event case, with a 82\% improvement with a small dataset.
 
 \begin{figure}[ht]
 	\centering
