@@ -428,11 +428,11 @@ An additional change provided with the indexing update is the ParameterContainer
 	\legend{2.0 GPU,2.2 GPU,2.0 CPU,2.2 CPU}
 	\end{axis}
 	\end{tikzpicture}
-	\label{figure-newindexspeed}
 	\caption{Comparison of GooFit 2.0 vs GooFit 2.2 on a Dual Xeon E5-2680 with 28 cores running at 2.4 Ghz, with an NVIDIA P100 GPU. Performance gains can be seen on the GPUs when upgrading to the new indexing system in GooFit 2.2, along with slight CPU penalties.}
+		\label{figure-newindexspeed}
 \end{figure}
 
-Table \ref{figure-newindexspeed} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. show that providing more coherent memory reads improves the performance by a factor of 2.4 in the large event case, with a 82\% improvement with a small dataset.
+Figure \ref{figure-newindexspeed} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. The 3-body decay improved runtime by 32\% with GooFit 2.2 and over 9 million events.
 
 \begin{figure}[ht]
 	\centering
