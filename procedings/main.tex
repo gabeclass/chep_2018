@@ -18,7 +18,7 @@
 	columns=fullflexible,
 	basicstyle=\ttfamily\footnotesize,
 	stringstyle=\color{green!50!black},
-	keywordstyle=\color{orange},
+	keywordstyle=\color{orange!75!black},
 	commentstyle=\color{white!50!black},
 	emph={GooFit,Observable,DataSet,UnbinnedDataSet,BinnedDataSet,
 		Variable,FitManager,
@@ -69,10 +69,10 @@
 %
 \section{Introduction}
 \label{intro}
-High Energy Physics experiments around the world are producing record amounts of data. Existing tools, such as the RooFit fitting framework, provide flexible and powerful abstractions for building distributions to fit that data with, but this power comes at a cost; this is computationally expensive, and often only runs on a single core. Modern architectures provide many cores, as well as new computing paradigms, such as GPUs, that provide significant new potential for high performance computations, but are non-trivial for the physicist to use to build distributions in the description style familiar to him.
+High Energy Physics experiments around the world are producing record amounts of data. Existing tools, such as the RooFit fitting framework, provide flexible and powerful abstractions for building distributions to fit that data with, but this power comes at a cost; this is computationally expensive, and often only runs on a single core. Modern architectures provide many cores, as well as new computing paradigms, such as GPUs, that provide significant new potential for high performance computations, but are non-trivial for physicists to use to build distributions in a familiar description style.
 
 
-GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit~\cite{lib:RooFit,lib:GooFit:main}. It provided composition of model pieces in the same manor as RooFit, but was powered by GPUs. It also provided ready to use models for common Probability Distribution Functions (PDFs) and quantum mechanical amplitudes, as well as specialized 3-body physics models. The GooFit 2.0 release~\cite{lib:GooFit} added a simpler build process, making it easy for users to pick up and run GooFit code, and combined work from several forks, providing more physics models, 4-body models, and more features.
+GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit~\cite{lib:RooFit,lib:GooFit:main}. Some comparisons are shown in figure~\ref{fig-perf} and table~\ref{tab-zachfit}. GooFit provides composition of model pieces in the same manor as RooFit, but is powered by GPUs. It also provides ready to use models for common Probability Distribution Functions (PDFs) and quantum mechanical amplitudes, as well as specialized 3-body physics models. The GooFit 2.0 release~\cite{lib:GooFit} added a simpler build process, making it easy for users to pick up and run GooFit code, and combined work from several forks, providing more physics models, 4-body models, and more features.
 
 \begin{figure}[h]
 	\centering
@@ -212,7 +212,7 @@ Possibly the most significant new feature in the recent GooFit releases is the s
 
 \subsection{Building and Installing}
 
-To install GooFit, a user now can simply use the \texttt{pip} tool to install it much like any other package. GooFit will compile from source during the install process so that it can select the maximum level of optimizations supported on your system. It will look for, and automatically use, CUDA and the GPU backend instead of the CPU backend as available.In \texttt{pip} version 10, you can simply install GooFit; older versions require you to install the SciKit-build package before installing GooFit.
+To install GooFit, a user now can simply use the Package Installer for Python, \texttt{pip}, to install it much like any other package. GooFit will compile from source during the install process so that it can select the maximum level of optimizations supported on your system. It will look for, and automatically use, CUDA and the GPU backend instead of the CPU backend as available. In \texttt{pip} version 10, you can simply install GooFit; older versions require you to install the SciKit-build package before installing GooFit.
 
 This Python installer integration was provided using the SciKit-Build package, released by the developers of CMake. It adapts a CMake based build (such as GooFit) to the Python ecosystem, and is one of the reasons support for alternate build systems was added to \texttt{pip} 10. Build options, such as explicit CPU/GPU selection, can be passed through to the underlying CMake build system if needed.
 
@@ -267,7 +267,7 @@ print(mu)
 	\label{fig-code}
 \end{figure}
 
-The syntax in the Python version of GooFit is very similar to that of the C++ version. In Python, memory is managed for the user, with Python keeping track of refcounts even when the only way to access a GooFit object is through another GooFit object.
+The syntax in the Python version of GooFit is very similar to that of the C++ version. In Python, memory is managed for the user, with Python keeping track of refcounts even when the only way to access a GooFit object is through another GooFit object.  See figure~\ref{fig-code} for a side-by-side example of C++ and Python code for GooFit.
 
 On top of this, some ``Pythonizations'' have been added; a term popular in the Python community for writing code that looks simple and clear by utilizing Python features. An example of such a feature is setting the value of a Variable. In C++, you call  methods for setting and getting a variable's values using \texttt{setValue} and \texttt{getValue}. You can do this in Python as well, but you can also just access or assign to the \texttt{value} property on the variable. So if you want to set a variable named \lstinline|var| to 1.2, you would use either the C++ compatible expression \lstinline|val.setValue(1.2)| or the more Pythonic expression \lstinline|val.value = 1.2|. You can also use many of the built in features of Python on GooFit objects directly, such as printing, lengths, indexing, and more.
 
@@ -275,7 +275,7 @@ Several methods have been added to make it easy to convert events to and from Nu
 
 \subsection{New features}
 
-To simplify the use of GooFit from Python, several new tools were added; these tools are usually available for C++ code as well. Directly evaluating a PDF over the currently set Obervable limits and binning can be done with the \texttt{evalutatePdf} method. One dimensional Monte Carlo generation on the CPU as added, as well, with the \texttt{fillMCDataSimple} method. A new tool was added called \texttt{DalitzPlotter}, which makes evaluation and simple MC generation over a 3-body amplitude model easy to do. The existing 4-body Monte Carlo generation, powered by MCBooster~\cite{lib:MCBooster}, was also improved primarily for easy Python access.
+To simplify the use of GooFit from Python, several new tools were added; these tools are usually available for C++ code as well. Directly evaluating a PDF over the currently set Observable limits and binning can be done with the \texttt{evalutatePdf} method. One dimensional Monte Carlo generation on the CPU is added, as well, with the \texttt{fillMCDataSimple} method. A new tool was added called \texttt{DalitzPlotter}, which makes evaluation and simple MC generation over a 3-body amplitude model easy to do. The existing 4-body Monte Carlo generation, powered by MCBooster~\cite{lib:MCBooster}, was also improved primarily for easy Python access.
 
 Examples were added in Python for this new functionality, using Jupyter notebooks to provide interactive visualization of 1D and Dalitz models.
 
@@ -328,7 +328,7 @@ Documentation for GooFit has been improved and integrated with the Python bindin
 	(3,1) -- (6,1) node [blue,midway,yshift=.4cm] {\small Function 2};
 	
 	\end{tikzpicture}
-	\caption{The classic GooFit indexing system. Each function keeps track of a set of indices, along with the total number of indices it "owns" (not shown). GooFit then looks up the values from the given indicies; this is internally referred to as GooFit's "double lookup" system. The meaning of indeces are hard-coded into the function and mostly the programmers responsibility to correctly handle.}
+	\caption{The classic GooFit indexing system. Each function keeps track of a set of indices, along with the total number of indices it "owns" (not shown). GooFit then looks up the values from the given indices; this is internally referred to as GooFit's "double lookup" system. The meaning of indices are hard-coded into the function and mostly the programmers responsibility to correctly handle.}
 	\label{fig-indexing-classic}
 \end{figure}
 
@@ -370,7 +370,7 @@ ind/.style={font=\bf}]
 \label{fig-indexing-new}
 \end{figure}
 
-A key feature of GooFit is the indexing system; this is the system GooFit uses to allow the PDF and amplitude code access to shared values. The original system, shown in figure~\ref{fig-indexing-classic}, just stores values once, but then uses a double lookup system to find the correct index to read. The new system, shown in figure~\ref{fig-indexing-new}, uses a little preprocessing to store values in a structure that no longer requires a double lookup, saving a significant amount of time in some cases.
+A key feature of GooFit is the indexing system; this is the system GooFit uses to allow the PDF and amplitude code to access shared values. The original system, shown in figure~\ref{fig-indexing-classic}, just stores values once, but then uses a double lookup system to find the correct index to read. The new system, shown in figure~\ref{fig-indexing-new}, uses a little preprocessing to store values in a structure that no longer requires a double lookup, saving a significant amount of time in some cases.
 
 The indexing system redesign in GooFit 2.2 targets improved GPU performance. The indexing system in GooFit needs to track the Variables, Observables, and any constants used by any combination of PDFs. This information is packed into four separate buffers. The primary index buffer provides either a constant integer value, or contains the index into one of the three subsequent buffers which contained events, parameters, or floating-precision constants~\cite{lib:GooFit:main}. For a NVIDIA Tesla P100 GPU, 16 blocks of 32-byte sized segments specific to a thread can be cached. Two problems occur with this 32 byte memory segment that affects GPU performance. First is that if only 8 of 32 bytes are used, then the memory transaction is wasteful. Second, the segments may need to be loaded multiple times during the execution of a PDF, which is unsatisfactory for GPU performance. Using the new indexing system improves this access pattern by having memory reads behave coalesced. A side effect of the new indexing system is duplicated memory for a specific Variable or Observable. The performance improvement at the cost of this duplicating memory has a larger impact on performance by providing better memory access coherence for each PDF.
 
@@ -432,27 +432,27 @@ Table \ref{figure-newindexspeed} provides a performance comparison between the o
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.5\textwidth]{LineExample}
-	\label{figure-ampgen}
 	\caption{Example of a single $D_0 \rightarrow K^{-} \pi^{+} \pi^{+} \pi^{-}$ decay using DecayLanugage's line display feature on an AmpGen line (shown at the top).}
+		\label{fig-ampgen}
 \end{figure}
 
 \section{A Uniform Decay Language}
 \label{sec-ampgen}
 
-GooFit has preliminary support for decays written in the DecayLanguage syntax as implemented in AmpGen \cite{lib:AmpGen}.
+GooFit has preliminary support for decays written in the DecayLanguage syntax as implemented in AmpGen \cite{lib:AmpGen}, primarily implemented as a standalone Python package in the SciKit-HEP organization.
 
 AmpGen is a tool for compiling amplitudes for use in the LHCb event generator. It is also available as a stand-alone package apart from the LHCb framework. It builds PDFs symbolically in C++, then converts them to a C file that can be compiled into a simple library. However, it also provides a clean, powerful grammar for describing decays.
 
-To make this language a general one that can be used across packages like GooFit, a new decay language parser was built in Python called DecayLanguage framework and released in Beta form. This implements an AmpGen compatible syntax, but is designed to produce code for other systems; the first implementation is provided, and produces C++ GooFit code. It also produces diagrams of lines in a Jupyter notebook, such as the one shown in figure~\ref{figure-ampgen}.
+To make this language a general one that can be used across packages like GooFit, a new decay language parser was built in Python called DecayLanguage framework and released in Beta form. This implements an AmpGen compatible syntax, but is designed to produce code for other systems; the first implementation is provided, and produces C++ GooFit code. It also produces diagrams of lines in a Jupyter notebook, such as the one shown in figure~\ref{fig-ampgen}.
 
-A comparison between the native C++ GooFit model description file and the AmpGen file for a similar decay, the  $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \cite{paper:kthreepi}, takes 1,314 lines to describe in GooFit but only 222 lines as AmpGen grammar. The AmpGen grammar maps directly onto the physics description of the model, with one line per decay or parameter, while the GooFit code is tied up in managing memory and building C++ structures.
+A comparison between the native C++ GooFit model description file and the AmpGen file for a similar decay, the  $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \cite{paper:kthreepi}, takes 1,314 lines to describe in GooFit but only 222 lines as AmpGen grammar. The AmpGen grammar maps directly onto the physics description of the model, with one line per decay or parameter, while the GooFit code is tied up in managing memory and building C++ structures. Once converted to GooFit code by DecayLanguage, the resulting code is very similar to the handwritten code, but with helpful comments containing descriptions of the decay, and provides identical performance.
 
 
 
 \section{Summary}
 \label{sec-summary}
 
-Three key improvements make GooFit easier to use and more powerful. First, the new Python bindings allow users to access GooFit from the popular Python interpreter. This makes models easier to compose models quickly, manipulate them from scripts, and interact with the scientific Python software ecosystem.
+Three key improvements make GooFit 2.1 and 2.2 easier to use and more powerful. First, the new Python bindings allow users to access GooFit from the popular Python interpreter. This makes it easier to compose models quickly, manipulate them from scripts, and interact with the scientific Python software ecosystem.
 GooFit's internal indexing system was replaced, making it simper to compose new PDFs and eliminating some common classes of mistakes for new developers. It provided a performance benefit for GPUs, and gives the GooFit core developers more flexibility for further improvements in the future.
 Finally, the new DecayLanguage provides interoperability with the AmpGen package, with more packages possible in the future. This is in early stages, but provides great potential for future developments.
 
