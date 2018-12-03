@@ -8,6 +8,7 @@
 \usepackage{units}
 \usepackage{pgfplots}
 \usepackage{listings}
+\usepackage{booktabs}
 
 \usetikzlibrary{decorations.pathreplacing, patterns}
 \pgfplotsset{compat=1.12}
@@ -191,14 +192,16 @@ The next two releases of GooFit, given in figure~\ref{fig-history}, brings us to
 
 \begin{table}[h]
 	\centering
-	\begin{tabular}{c|c|c|c}
+	\begin{tabular}{cccc}
+		\toprule
 		Number of Cores & Hardware & Pipipi0 & ZachFit \\
-		\hline
+		\midrule
 2 Cores &           Core 2 Duo & \unit[1,159]{s} & \unit[738]{s} \\
 GPU &  GeForce GTX 1050 Ti & \unit[86.4]{s}& \unit[60.3]{s}   \\
 GPU &            Tesla K40 & \unit[64.0]{s} & \unit[60.3]{s} \\
 MPI \& GPU & Tesla K40 $\times 2$ & \unit[39.3]{s} & \unit[54.3]{s} \\
 GPU &           Tesla P100 & \unit[20.3]{s}& \unit[23.5]{s} \\
+\bottomrule
 	\end{tabular}
 \caption{GPU/CPU performance comparison. The models are the same as figure~\ref{fig-perf}. From ref.~\cite{procedings:acat2017}.}
 \label{tab-zachfit}
@@ -263,7 +266,7 @@ gauss.fitTo(ds)
 print(mu)
 		\end{lstlisting}
 	    \end{minipage}
-	\caption{Example of GooFit 2.2 code in C++ (left) and Python (right). Some includes and main-function code have been suppressed in the C++ version for clarity. This code snippit fits a gaussian PDF to a gaussian distribution, and then prints the fit result for the $\mu$ parameter to the screen.}
+	\caption{Example of GooFit 2.2 code in C++ (left) and Python (right). Some includes and main-function code have been suppressed in the C++ version for clarity. This code snippit fits a Gaussian PDF to a Gaussian distribution, and then prints the fit result for the $\mu$ parameter to the screen.}
 	\label{fig-code}
 \end{figure}
 
@@ -287,6 +290,7 @@ Documentation for GooFit has been improved and integrated with the Python bindin
 \label{sec-ind}
 
 \begin{figure}[h]
+		\centering
 	\begin{tikzpicture}[scale=.6,
 	arr/.style={-latex, preaction={draw, -latex, white, ultra thick}}]
 	\path[use as bounding box] (-3,-1.5) rectangle (14, 2);
@@ -333,6 +337,7 @@ Documentation for GooFit has been improved and integrated with the Python bindin
 \end{figure}
 
 \begin{figure}[h]
+	\centering
 \begin{tikzpicture}[xscale=.7, yscale=.6,
 first/.style={pattern=horizontal lines, pattern color=blue!30!white},
 second/.style={pattern=crosshatch, pattern color=red!30!white},
@@ -439,7 +444,7 @@ Table \ref{figure-newindexspeed} provides a performance comparison between the o
 \section{A Uniform Decay Language}
 \label{sec-ampgen}
 
-GooFit has preliminary support for decays written in the DecayLanguage syntax as implemented in AmpGen \cite{lib:AmpGen}, primarily implemented as a standalone Python package in the SciKit-HEP organization.
+GooFit has preliminary support for decays written in the DecayLanguage syntax as implemented in AmpGen \cite{lib:AmpGen}, primarily implemented as a standalone Python package in the SciKit-HEP organization \cite{org:scikithep}.
 
 AmpGen is a tool for compiling amplitudes for use in the LHCb event generator. It is also available as a stand-alone package apart from the LHCb framework. It builds PDFs symbolically in C++, then converts them to a C file that can be compiled into a simple library. However, it also provides a clean, powerful grammar for describing decays.
 
