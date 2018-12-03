@@ -7,10 +7,25 @@
 \usepackage{tikz}
 \usepackage{units}
 \usepackage{pgfplots}
+\usepackage{listings}
+
 \usetikzlibrary{decorations.pathreplacing, patterns}
 \pgfplotsset{compat=1.12}
 
 \graphicspath{{./images/}}
+
+\lstset{
+	columns=fullflexible,
+	basicstyle=\ttfamily\footnotesize,
+	stringstyle=\color{green!50!black},
+	keywordstyle=\color{orange},
+	commentstyle=\color{white!50!black},
+	emph={GooFit,Observable,DataSet,UnbinnedDataSet,BinnedDataSet,
+		Variable,FitManager,
+		goofit,GaussianPdf,DalitzPlotter},
+	emphstyle=\color{blue!50!black}
+}
+
 
 % maybe use: https://github.com/olivierverdier/python-latex-highlighting/blob/master/pythonhighlight.sty
 
@@ -165,10 +180,10 @@ every node/.style={font=\footnotesize}
 	
 	\end{loglogaxis}
 	\end{tikzpicture}
-	\caption{Left: 
-		$\pi\pi\pi^0$, 16 time-dependent amplitudes. Original RooFit code: \unit[19,489]{s} single core. 40 free par.\ and 100,000+ events.
-		Right:
-		ZachFit: $M (D^{*+})-M (D^0)$. 142,576 events in unbinned fit.}
+	\caption{On the left: 
+		Fit from an analysis of $D^{0} \rightarrow \pi^{+}\pi^{-}\pi^0$, with 16 time-dependent amplitudes~\cite{TheBABAR:2016gom}. Original RooFit code took \unit[19,489]{s} on a single core. 40 free parameters and 100,000+ events.
+		On the right:
+		The ``ZachFit'': a fit to a $M (D^{*+})-M (D^0)$ measurement~\cite{paper:zachfit}. 142,576 events in an unbinned log likelyhood fit.}
 	\label{fig-perf}
 \end{figure*}
 
@@ -183,7 +198,7 @@ GPU &            Tesla K40 & \unit[64.0]{s} & \unit[60.3]{s} \\
 MPI \& GPU & Tesla K40 $\times 2$ & \unit[39.3]{s} & \unit[54.3]{s} \\
 GPU &           Tesla P100 & \unit[20.3]{s}& \unit[23.5]{s} \\
 	\end{tabular}
-\caption{GPU performance comparison.}
+\caption{GPU/CPU performance comparison. The models are the same as figure~\ref{fig-perf}. From ref.~\cite{procedings:acat2017}.}
 \label{tab-zachfit}
 \end{table}
 
@@ -203,11 +218,64 @@ In the GooFit repository, 12 of the original 13 GooFit examples have been  adapt
 
 \subsection{Syntax}
 
+\begin{figure}
+	    \begin{minipage}{.51\textwidth}
+		\begin{lstlisting}[language=C++]
+#include <goofit/...>
+using namespace GooFit;
+
+Observable x{"x", 0, 10};
+Variable mu{"mu", 1};
+Variable sigma{"sigma", 1, 0, 10};
+GaussianPdf gauss{"gauss", &x, &mu, &sigma};
+UnbinnedDataSet ds{x};
+
+std::mt19937 gen;
+std::normal_distribution<double> d{1, 2.5};
+for(size_t i=0; i<100000; i++)
+	ds.addEvent(d(gen));
+
+gauss.fitTo(&ds);
+
+std::cout << mu << std::endl;
+		\end{lstlisting}
+	    \end{minipage}%
+	    \begin{minipage}{.49\textwidth}
+		\begin{lstlisting}[language=Python] 
+from goofit import *
+import numpy as np
+
+x = Observable("x", 0, 10)
+mu = Variable("mu", 1)
+sigma = Variable("sigma", 1, 0, 10)
+gauss = GaussianPdf("gauss", x, mu, sigma)
+ds = UnbinnedDataSet(x)
+
+data = np.random.normal(1, 2.5, (100000,1))
+ds.from_matrix(data, filter=True)
+
+
+
+gauss.fitTo(ds)
+
+print(mu)
+		\end{lstlisting}
+	    \end{minipage}
+	\caption{Example of GooFit 2.2 code in C++ (left) and Python (right). Some includes and main-function code have been suppressed in the C++ version for clarity. This code snippit fits a gaussian PDF to a gaussian distribution, and then prints the fit result for the $\mu$ parameter to the screen.}
+	\label{fig-code}
+\end{figure}
+
 The syntax provided by GooFit is very similar in the Python version, just with necessary changes to the Python way of writing things. Memory is managed for the user, with Python keeping track of refcounts even when the only way to access a GooFit object is through another GooFit object.
 
 On top of this, some ``Pythonizations'' have been added; a term popular in the Python community for writing code that looks simple and clear by utilizing Python features. An example of such a feature is in setting the value of a Variable. In C++, you have to call  methods for setting and getting a variable's values, called \texttt{setValue} and \texttt{getValue}. You can do this in Python as well, but you can also just access or assign to the \texttt{value} property on the variable. You can also use many of the built in features of Python on GooFit objects directly, such as printing, lengths, indexing, and more.
 
 Several methods have been added to make it easy to convert events to and from Numpy arrays. The user can even choose to filter out-of-range values during the conversion.There are also utilities to extract interesting quantities, evaluations, and caches from GooFit into Numpy arrays. 
+
+\subsection{New features}
+
+To simplify the use of GooFit from Python, several new tools were added; these tools are usually available for C++ code as well. Directly evaluating a PDF over the currently set Obervable limits and binning can be done with the \texttt{evalutatePdf} method. One dimensional Monte Carlo generation on the CPU as added, as well, with the \texttt{fillMCDataSimple} method. A new tool was added called \texttt{DalitzPlotter}, which makes evaluation and simple MC generation over a 3-body amplitude model easy to do. The existing 4-body Monte Carlo generation, powered by MCBooster~\cite{lib:MCBooster}, was also improved primarily for easy Python access.
+
+Examples were added in Python for this new functionality, using Jupyter notebooks to provide interactive visualization of 1D and Dalitz models.
 
 \subsection{Documentation}
 
@@ -380,7 +448,7 @@ AmpGen is a tool for compiling amplitudes for use in the LHCb event generator. I
 
 In order to make this language a general one that can be used across packages like GooFit, a new decay language parser was built in Python called DecayLanguage framework and released in Beta form. This implements an AmpGen compatible syntax, but is designed to produce code for other systems; the first implementation is provided, and produces C++ GooFit code. It also produces diagrams of lines in a Jupyter notebook, such as the one shown in figure~\ref{figure-ampgen}.
 
-A comparison between the native C++ GooFit model description file and the AmpGen file for a similar decay, the  $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \todo{https://inspirehep.net/record/1644791 [Eur.Phys.J. C78 (2018)]}, takes 1,314 lines to describe in GooFit but only 222 lines as AmpGen grammar.
+A comparison between the native C++ GooFit model description file and the AmpGen file for a similar decay, the  $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \cite{paper:kthreepi}, takes 1,314 lines to describe in GooFit but only 222 lines as AmpGen grammar.
 
 \begin{figure}[h]
 	\includegraphics[width=.5\textwidth]{LineExample}
@@ -468,6 +536,8 @@ Finally, the new DecayLanguage provides interoperability with the AmpGen package
 %Book Author, \textit{Book title} (Publisher, place, year) page numbers
 %% etc
 %\end{thebibliography}
+
+% https://inspirehep.net/record/1644791 [Eur.Phys.J. C78 (2018)]
 
 \end{document}
 

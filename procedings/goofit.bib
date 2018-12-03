@@ -9,6 +9,7 @@ volume         = {2},
 year           = {2014},
 pages          = {160-176},
 doi            = {10.1109/ACCESS.2014.2306895},
+eprint   = {10.1109/ACCESS.2014.2306895},
 SLACcitation   = "%%CITATION = INSPIRE-1398156;%%"
 }
 
@@ -26,6 +27,95 @@ SLACcitation   = "%%CITATION = INSPIRE-1398156;%%"
 	author = {Evans, Tim and others},
 	year = {December 1, 2018},
 	url = {https://gitlab.cern.ch/lhcb/Gauss/tree/LHCBGAUSS-1058.AmpGenDev/Gen/AmpGen},
+}
+
+@article{paper:kthreepi,
+	author         = "Aaij, Roel and others",
+	title          = "{Studies of the resonance structure in $D^{0} \rightarrow
+	K^\mp \pi ^\pm \pi ^\pm \pi ^\mp $ decays}",
+	collaboration  = "LHCb",
+	journal        = "Eur. Phys. J.",
+	volume         = "C78",
+	year           = "2018",
+	number         = "6",
+	pages          = "443",
+	doi            = "10.1140/epjc/s10052-018-5758-4",
+	eprint         = "1712.08609",
+	archivePrefix  = "arXiv",
+	primaryClass   = "hep-ex",
+	reportNumber   = "LHCB-PAPER-2017-040, CERN-EP-2017-314,
+	LHCB-PAPER-2017-040-CERN-EP-2017-314",
+	SLACcitation   = "%%CITATION = ARXIV:1712.08609;%%"
+}
+
+@article{procedings:acat2017,
+	author         = "Schreiner, Henry and Hasse, Christoph and Hittle, Bradley
+	and Pandey, Himadri and Sokoloff, Michael and Tomko,
+	Karen",
+	title          = "{GooFit 2.0}",
+	booktitle      = "{Proceedings, 18th International Workshop on Advanced
+	Computing and Analysis Techniques in Physics Research
+	(ACAT 2017): Seattle, WA, USA, August 21-25, 2017}",
+	journal        = "J. Phys. Conf. Ser.",
+	volume         = "1085",
+	year           = "2018",
+	number         = "4",
+	pages          = "042014",
+	doi            = "10.1088/1742-6596/1085/4/042014",
+	eprint         = "1710.08826",
+	archivePrefix  = "arXiv",
+	primaryClass   = "cs.MS",
+	SLACcitation   = "%%CITATION = ARXIV:1710.08826;%%"
+}
+
+@article{paper:zachfit,
+	author         = "Lees, J. P. and others",
+	title          = "{Measurement of the $D*(2010)^+$ meson width and the
+	$D*(2010)^+ - D^0$ mass difference}",
+	collaboration  = "BaBar",
+	journal        = "Phys. Rev. Lett.",
+	volume         = "111",
+	year           = "2013",
+	number         = "11",
+	pages          = "111801",
+	doi            = "10.1103/PhysRevLett.111.111801,
+	10.1103/PhysRevLett.111.169902",
+	eprint         = "1304.5657",
+	archivePrefix  = "arXiv",
+	primaryClass   = "hep-ex",
+	reportNumber   = "BABAR-PUB-13-004, SLAC-PUB-15424",
+	SLACcitation   = "%%CITATION = ARXIV:1304.5657;%%"
+}
+
+@article{TheBABAR:2016gom,
+	author         = {Lees, J. P. and others},
+	title          = {{Measurement of the neutral $D$ meson mixing parameters
+	in a time-dependent amplitude analysis of the
+	$D^0\to\pi^+\pi^-\pi^0$ decay}},
+	collaboration  = {BaBar},
+	journal        = {Phys. Rev.},
+	volume         = {D93},
+	year           = {2016},
+	number         = {11},
+	pages          = {112014},
+	doi            = {10.1103/PhysRevD.93.112014},
+	eprint         = {1604.00857},
+	archivePrefix  = {arXiv},
+	primaryClass   = {hep-ex},
+	reportNumber   = {BABAR-PUB-15-009, SLAC-PUB-16505},
+	SLACcitation   = {%%CITATION = ARXIV:1604.00857;%%}
+}
+
+
+@article{lib:MCBooster,
+	author         = {Alves Jr, A. A. and Sokoloff, M. D.},
+	title          = {{MCBooster: a library for fast Monte Carlo generation of
+	phase-space decays on massively parallel platforms}},
+	year           = {2017},
+	eprint         = {1702.05712},
+	archivePrefix  = {arXiv},
+	primaryClass   = {hep-ex},
+	SLACcitation   = {%%CITATION = ARXIV:1702.05712;%%}
 }
 
 
@@ -132,18 +222,6 @@ SLACcitation   = "%%CITATION = INSPIRE-1398156;%%"
 	url = {https://github.com/MultithreadCorner/MCBooster}, 
 	note = {{Version 1.1.0, accessed 2017-10-20}}
 }
-
-@article{lib:MCBooster,
-	author         = {Alves Jr, A. A. and Sokoloff, M. D.},
-	title          = {{MCBooster: a library for fast Monte Carlo generation of
-	phase-space decays on massively parallel platforms}},
-	year           = {2017},
-	eprint         = {1702.05712},
-	archivePrefix  = {arXiv},
-	primaryClass   = {hep-ex},
-	SLACcitation   = {%%CITATION = ARXIV:1702.05712;%%}
-}
-
 
 @misc{lib:CLI11,
 	title = {{\em CLI11}},
@@ -271,25 +349,6 @@ keywords = {GPU, OpenMP, PEARC17 proceedings},
 	archivePrefix  = {arXiv},
 	primaryClass   = {physics.data-an},
 	SLACcitation   = {%%CITATION = ARXIV:1703.03284;%%}
-}
-
-@article{TheBABAR:2016gom,
-	author         = {Lees, J. P. and others},
-	title          = {{Measurement of the neutral $D$ meson mixing parameters
-	in a time-dependent amplitude analysis of the
-	$D^0\to\pi^+\pi^-\pi^0$ decay}},
-	collaboration  = {BaBar},
-	journal        = {Phys. Rev.},
-	volume         = {D93},
-	year           = {2016},
-	number         = {11},
-	pages          = {112014},
-	doi            = {10.1103/PhysRevD.93.112014},
-	eprint         = {1604.00857},
-	archivePrefix  = {arXiv},
-	primaryClass   = {hep-ex},
-	reportNumber   = {BABAR-PUB-15-009, SLAC-PUB-16505},
-	SLACcitation   = {%%CITATION = ARXIV:1604.00857;%%}
 }
 
 @article{Aaij:2015lsa,
