@@ -58,9 +58,8 @@ High Energy Physics experiments around the world are producing record amounts of
 
 GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit developed at the University of Cincinnati in 2013~\cite{lib:GooFit:main}. It provided composition of model pieces in the same manor as RooFit, but was powered by GPUs. It also provided ready to use models for common Probability Distribution Functions (PDFs), as well as specialized three body physics models. The GooFit 2.0 release~\cite{lib:GooFit} added a simpler build process, making it easy for users to pick up and run GooFit code, and combined work from several forks, providing more physics models and more features.
 
-The next two releases of GooFit, bringing us up to version 2.2, will be the topic of our discussion. The most notable new change is the addition of fully functioning Python bindings, allowing users to code the composition of PDFs in a dynamic scripting language, opening up new possibilities for quick modeling and interesting interactions with other Python libraries, such as for plotting. Other changes include a new indexing system, which makes PDFs easier to write, and provides some small performance benefits on GPUs. A prototype for a uniform decay language, shared with other packages such as AmpGen~\todo{REF}, provides a powerful new frontend that can be used for user code.
+The next two releases of GooFit, given in figure~\ref{fig-history}, brings us up to version 2.2, and the work contained in them will be the topic of our discussion. The most notable new change is the addition of fully functioning Python bindings, allowing users to code the composition of PDFs in a dynamic scripting language, opening up new possibilities for quick modeling and interesting interactions with other Python libraries, such as for plotting. Other changes include a new indexing system, which makes PDFs easier to write, and provides some small performance benefits on GPUs. A prototype for a uniform decay language, shared with other packages such as AmpGen~\cite{lib:AmpGen}, provides a powerful new frontend that can be used for user code.
 
-\section{GooFit Performance}
 
 \begin{figure*}
 	\centering
@@ -114,7 +113,7 @@ every node/.style={font=\footnotesize}
 \label{fig-history}
 \end{figure*}
 
-\begin{figure}[h]
+\begin{figure*}
 	\centering
 	\begin{tikzpicture}[scale=.8]
 	\begin{loglogaxis}[
@@ -141,12 +140,7 @@ every node/.style={font=\footnotesize}
 	
 	\end{loglogaxis}
 	\end{tikzpicture}
-	\caption{$\pi\pi\pi^0$, 16 time-dependent amplitudes. Original RooFit code: \unit[19,489]{s} single core. 40 free par.\ and 100,000+ events.}
-	\label{fig-pipipi0}
-\end{figure}
-
-\begin{figure}[h]
-	\centering
+%
 	\begin{tikzpicture}[scale=.8]
 	\begin{loglogaxis}[
 	axis x line*=bottom,
@@ -171,9 +165,12 @@ every node/.style={font=\footnotesize}
 	
 	\end{loglogaxis}
 	\end{tikzpicture}
-	\caption{ZachFit: $M (D^{*+})-M (D^0)$. 142,576 events in unbinned fit.}
-	\label{fig-zachfit}
-\end{figure}
+	\caption{Left: 
+		$\pi\pi\pi^0$, 16 time-dependent amplitudes. Original RooFit code: \unit[19,489]{s} single core. 40 free par.\ and 100,000+ events.
+		Right:
+		ZachFit: $M (D^{*+})-M (D^0)$. 142,576 events in unbinned fit.}
+	\label{fig-perf}
+\end{figure*}
 
 \begin{table}
 	\centering
@@ -194,7 +191,27 @@ GPU &           Tesla P100 & \unit[20.3]{s}& \unit[23.5]{s} \\
 \section{Python Bindings}
 \label{sec-py}
 
-The 
+Possibly the most significant new feature in the recent GooFit releases is the support for Python as a composition language. This allows simpler installation, simpler user code, faster development, easier advanced control of the fit, and interoperability with the rest of the Python ecosystem, such as for plotting.
+
+\subsection{Building and Installing}
+
+To install GooFit, a user now can simply use the \texttt{pip} tool to install it much like any other package. GooFit will compile from source during the install process so that it can select the maximum level of optimizations supported on your system. It will look for and automatically use CUDA and the GPU backend instead of the CPU backend as available.In \texttt{pip} version 10, you can simply install GooFit; older versions require you to install the scikit-build \todo{ref} package before installing GooFit.
+
+This Python installer integration was provided using the SciKit-Build package, released by the developers of CMake. It adapts a CMake based build (such as GooFit) to the Python ecosystem, and is one of the reasons support for alternate build systems was added to \texttt{pip} 10. Build options, such as explicit CPU/GPU selection, can be passed through to the underlying CMake build system if needed.
+
+In the GooFit repository, 12 of the original 13 GooFit examples have been  adapted to the new Python syntax. For many of the examples, ROOT is no longer required in the Python version, being replaced by common Python libraries.
+
+\subsection{Syntax}
+
+The syntax provided by GooFit is very similar in the Python version, just with necessary changes to the Python way of writing things. Memory is managed for the user, with Python keeping track of refcounts even when the only way to access a GooFit object is through another GooFit object.
+
+On top of this, some ``Pythonizations'' have been added; a term popular in the Python community for writing code that looks simple and clear by utilizing Python features. An example of such a feature is in setting the value of a Variable. In C++, you have to call  methods for setting and getting a variable's values, called \texttt{setValue} and \texttt{getValue}. You can do this in Python as well, but you can also just access or assign to the \texttt{value} property on the variable. You can also use many of the built in features of Python on GooFit objects directly, such as printing, lengths, indexing, and more.
+
+Several methods have been added to make it easy to convert events to and from Numpy arrays. The user can even choose to filter out-of-range values during the conversion.There are also utilities to extract interesting quantities, evaluations, and caches from GooFit into Numpy arrays. 
+
+\subsection{Documentation}
+
+Documentation for GooFit has been improved and integrated with the Python bindings. Most PDFs have relivent documentation covering the mathematics that have been implemented. This is picked up by the Doxygen parser, and included in the online API documentation for the C++ code. The same documentation is also exported to the Python bindings, and gets rendered into HTML with math intact inside a Jupyter notebook if you display a PDF class. This extraction was done in CMake by selecting the Doxygen style comments, printing them out into new generated headers, and giving that to the Python bindings.
 
 \section{The New Indexing System}
 \label{sec-ind}
@@ -241,7 +258,7 @@ The
 	(3,1) -- (6,1) node [blue,midway,yshift=.4cm] {\small Function 2};
 	
 	\end{tikzpicture}
-	\caption{An example of the classic GooFit indexing system.}
+	\caption{The classic GooFit indexing system. Each function keeps track of a set of indices, along with the total number of indices it "owns" (not shown). GooFit then looks up the values from the given indicies; this is internally referred to as GooFit's "double lookup" system. The meaning of indeces are hard-coded into the function and mostly the programmers responsibility to correctly handle.}
 	\label{fig-indexing-classic}
 \end{figure}
 
@@ -279,7 +296,7 @@ ind/.style={font=\bf}]
 \draw [second] (3,0) rectangle (4,1) node [midway] {1.0};
 \end{scope}
 \end{tikzpicture}
-\caption{An example of the new GooFit indexing system.}
+\caption{The new GooFit indexing system. Four arrays are stored, and instead of storing a lookup, each parameter is copied in by the underlying system as needed (potentially multiple times). This reduces the lookup cost in some cases.}
 \label{fig-indexing-new}
 \end{figure}
 
@@ -291,14 +308,11 @@ An additional change provided with the indexing update is the ParameterContainer
 
 \begin{table}
 	\centering
-	\begin{tabular}{ |r|r|r| }
-		\hline
+	\begin{tabular}{c|c|c}
 			 & GooFit 2.0 (s) & GooFit 2.2 (s) \\
 		\hline
 			Dalitz [100,000 events] & 3.12221 & 1.70781 \\
-		\hline
 			Daltiz [10,000,000 events] & 317.347 & 130.282 \\
-		\hline
 	\end{tabular}
 	\caption{Performance comparisons of GooFit 2.0 versus GooFit 2.2 including the new indexing system.}
 	\label{table:1}
@@ -359,9 +373,16 @@ Table \ref{table:1} provides a performance comparison between the old indexing s
 
 \section{A Uniform Decay Language}
 \label{sec-ampgen}
-More here.
 
-\begin{figure}
+GooFit has preliminary support for decays written in the DecayLanguage syntax as implemented in AmpGen \cite{lib:AmpGen}.
+
+AmpGen is a tool for compiling amplitudes for use in the LHCb event generator. It is also available as a stand-alone package apart from the LHCb framework. It builds PDFs symbolicily in C++, then converts them to a C file that can be compiled into a simple library. However, it also provides a clean, powerful grammar for describing decays.
+
+In order to make this language a general one that can be used across packages like GooFit, a new decay language parser was built in Python called DecayLanguage framework and released in Beta form. This implements an AmpGen compatible syntax, but is designed to produce code for other systems; the first implementation is provided, and produces C++ GooFit code. It also produces diagrams of lines in a Jupyter notebook, such as the one shown in figure~\ref{figure-ampgen}.
+
+A comparison between the native C++ GooFit model description file and the AmpGen file for a similar decay, the  $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \todo{https://inspirehep.net/record/1644791 [Eur.Phys.J. C78 (2018)]}, takes 1,314 lines to describe in GooFit but only 222 lines as AmpGen grammar.
+
+\begin{figure}[h]
 	\includegraphics[width=.5\textwidth]{LineExample}
 	\label{figure-ampgen}
 	\caption{Example of decay from DecayLanugage.}
@@ -369,7 +390,12 @@ More here.
 
 \section{Summary}
 \label{sec-summary}
-More here.
+
+Three key improvements make GooFit easier to use and more powerful. First, the new Python bindings allow users to access GooFit from the popular Python interpreter. This makes models easier to compose models quickly, manipulate them from scripts, and interact with the scientific Python software ecosystem.
+
+GooFit's internal indexing system was replaced, making it simper to compose new PDFs and eliminating some common classes of mistakes for new developers. It provided a performance benefit for GPUs, and gives the GooFit core developers more flexibility for further improvements in the future.
+
+Finally, the new DecayLanguage provides interoperability with the AmpGen package, with more packages possible in the future. This is in early stages, but provides great potential for future developments.
 
 %For one-column wide figures use syntax of figure~\ref{fig-1}
 %\begin{figure}[h]
