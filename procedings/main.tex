@@ -55,11 +55,11 @@
 }        % etc.
 
 \institute{
-	University of Cincinnati
+	University of Cincinnati, Cincinnati, Ohio, USA
 \and
-	Ohio Supercomputer Center
+	Ohio Supercomputer Center, Columbus, Ohio, USA
 \and
-	CERN / Technische Universit\"at Dortmund (DE)
+	CERN / Technische Universit\"at Dortmund (DE), Dortmund, Germany
 }
 
 \abstract{%
@@ -74,62 +74,6 @@ High Energy Physics experiments around the world are producing record amounts of
 
 
 GooFit is a high-performance multi-thread and GPU ready framework providing a similar syntax to RooFit~\cite{lib:RooFit,lib:GooFit:main}. Some comparisons are shown in figure~\ref{fig-perf} and table~\ref{tab-zachfit}. GooFit provides composition of model pieces in the same manor as RooFit, but is powered by GPUs. It also provides ready to use models for common Probability Distribution Functions (PDFs) and quantum mechanical amplitudes, as well as specialized 3-body physics models. The GooFit 2.0 release~\cite{lib:GooFit} added a simpler build process, making it easy for users to pick up and run GooFit code, and combined work from several forks, providing more physics models, 4-body models, and more features.
-
-\begin{figure}[h]
-	\centering
-	\begin{tikzpicture}[xscale=1.1,
-	goonode/.style={fill=black, circle, minimum size=1.25ex, inner sep=0},
-	version/.style={above=1ex, black},
-	events/.style={below=1ex, black},
-	every node/.style={font=\footnotesize}
-	]
-	\draw [-latex, ultra thick, black] (0,0) -- (11.5,0);
-	\draw [|-latex, thick, black] (7.8,-.8) -- (11.5,-.8) node [midway, below, xshift=.5em] {Modernization};
-	
-	\foreach \x in {2013,...,2018} {
-		\node at (2*\x-2*2013,0) [above=3.5ex, black] {\x};
-		\draw [thick, black] (2*\x-2*2013,-.1) -- (2*\x-2*2013,.1);
-		\draw [thick, dotted, black] (2*\x-2*2013,.6) -- (2*\x-2*2013,.2);
-	}
-	
-	\node (v01) at (.3,0) [goonode] {};
-	\node at (v01) [version] {0.1};
-	
-	\node (v02) at (.8,0) [goonode] {};
-	\node at (v02) [version] {0.2};
-	
-	\node (v03) at (1.3,0) [goonode] {};
-	\node at (v03) [version] {0.3};
-	
-	\node (v04) at (1.8,0) [goonode] {};
-	\node at (v04) [events] {OpenMP};
-	\node at (v04) [version] {0.4};
-	
-	\node at (4,0) [events] {Work in forks};
-	
-	\node (v10) at (8.2,0) [goonode] {};
-	\node at (7,0) [events] {Minor updates};
-	\node at (v10) [version] {1.0};
-	
-	\node (v20) at (8.9,0)  [goonode] {};
-	\node at (v20) [events] {CMake};
-	\node at (v20) [version] {2.0};
-	
-	\node (v21) at (10.2,0)  [goonode] {};
-	\node at (v21) [events] {Python};
-	\node at (v21) [version] {2.1};
-	
-	\node (v22) at (11.2,0)  [goonode] {};
-	\node at (v22) [events] {Indexing};
-	\node at (v22) [version] {2.2};
-	\end{tikzpicture}%
-	\caption{Timeline of GooFit development. Key points are version 2.0: New build system, C++11, and 4-body time dependent analyses support; version 2.1: Python bindings using Pybind11; and version 2.2: new indexing (and lots of Python improvements).}
-	\label{fig-history}
-\end{figure}
-
-The next two releases of GooFit, given in figure~\ref{fig-history}, brings us to version 2.2, and the work contained in them will be the topic of this discussion. The most notable new change is the addition of fully functioning Python bindings, allowing users to code the composition of PDFs in a dynamic scripting language, opening up new possibilities for quick modeling and interesting interactions with other Python libraries, such as for plotting. Other changes include a new indexing system, which makes amplitudes and PDFs easier to write, and provides some small performance benefits on GPUs. A prototype for a uniform decay language, shared with other packages such as AmpGen~\cite{lib:AmpGen}, provides a powerful new frontend that can be used for user code.
-
-
 
 \begin{figure}[h]
 	\centering
@@ -190,8 +134,65 @@ The next two releases of GooFit, given in figure~\ref{fig-history}, brings us to
 	\label{fig-perf}
 \end{figure}
 
+The next two releases of GooFit, given in figure~\ref{fig-history}, brings us to version 2.2, and the work contained in them will be the topic of this discussion. The most notable new change is the addition of fully functioning Python bindings, allowing users to code the composition of PDFs in a dynamic scripting language, opening up new possibilities for quick modeling and interesting interactions with other Python libraries, such as for plotting. Other changes include a new indexing system, which makes amplitudes and PDFs easier to write, and provides some small performance benefits on GPUs. A prototype for a uniform decay language, shared with other packages such as AmpGen~\cite{lib:AmpGen}, provides a powerful new frontend that can be used for user code.
+
+
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[xscale=1.1,
+	goonode/.style={fill=black, circle, minimum size=1.25ex, inner sep=0},
+	version/.style={above=1ex, black},
+	events/.style={below=1ex, black},
+	every node/.style={font=\footnotesize}
+	]
+	\draw [-latex, ultra thick, black] (0,0) -- (11.5,0);
+	\draw [|-latex, thick, black] (7.8,-.8) -- (11.5,-.8) node [midway, below, xshift=.5em] {Modernization};
+	
+	\foreach \x in {2013,...,2018} {
+		\node at (2*\x-2*2013,0) [above=3.5ex, black] {\x};
+		\draw [thick, black] (2*\x-2*2013,-.1) -- (2*\x-2*2013,.1);
+		\draw [thick, dotted, black] (2*\x-2*2013,.6) -- (2*\x-2*2013,.2);
+	}
+	
+	\node (v01) at (.3,0) [goonode] {};
+	\node at (v01) [version] {0.1};
+	
+	\node (v02) at (.8,0) [goonode] {};
+	\node at (v02) [version] {0.2};
+	
+	\node (v03) at (1.3,0) [goonode] {};
+	\node at (v03) [version] {0.3};
+	
+	\node (v04) at (1.8,0) [goonode] {};
+	\node at (v04) [events] {OpenMP};
+	\node at (v04) [version] {0.4};
+	
+	\node at (4,0) [events] {Work in forks};
+	
+	\node (v10) at (8.2,0) [goonode] {};
+	\node at (7,0) [events] {Minor updates};
+	\node at (v10) [version] {1.0};
+	
+	\node (v20) at (8.9,0)  [goonode] {};
+	\node at (v20) [events] {CMake};
+	\node at (v20) [version] {2.0};
+	
+	\node (v21) at (10.2,0)  [goonode] {};
+	\node at (v21) [events] {Python};
+	\node at (v21) [version] {2.1};
+	
+	\node (v22) at (11.2,0)  [goonode] {};
+	\node at (v22) [events] {Indexing};
+	\node at (v22) [version] {2.2};
+	\end{tikzpicture}%
+	\caption{Timeline of GooFit development. Key points are version 2.0: New build system, C++11, and 4-body time dependent analyses support; version 2.1: Python bindings using Pybind11; and version 2.2: new indexing (and lots of Python improvements).}
+	\label{fig-history}
+\end{figure}
+
+
 \begin{table}[h]
 	\centering
+    \caption{GPU/CPU performance comparison. The models are the same as figure~\ref{fig-perf}. From ref.~\cite{procedings:acat2017}.}
 	\begin{tabular}{cccc}
 		\toprule
 		Number of Cores & Hardware & Pipipi0 & ZachFit \\
@@ -203,7 +204,6 @@ MPI \& GPU & Tesla K40 $\times 2$ & \unit[39.3]{s} & \unit[54.3]{s} \\
 GPU &           Tesla P100 & \unit[20.3]{s}& \unit[23.5]{s} \\
 \bottomrule
 	\end{tabular}
-\caption{GPU/CPU performance comparison. The models are the same as figure~\ref{fig-perf}. From ref.~\cite{procedings:acat2017}.}
 \label{tab-zachfit}
 \end{table}
 
@@ -272,7 +272,7 @@ print(mu)
 
 The syntax in the Python version of GooFit is very similar to that of the C++ version. In Python, memory is managed for the user, with Python keeping track of refcounts even when the only way to access a GooFit object is through another GooFit object.  See figure~\ref{fig-code} for a side-by-side example of C++ and Python code for GooFit.
 
-On top of this, some ``Pythonizations'' have been added; a term popular in the Python community for writing code that looks simple and clear by utilizing Python features. An example of such a feature is setting the value of a Variable. In C++, you call  methods for setting and getting a variable's values using \texttt{setValue} and \texttt{getValue}. You can do this in Python as well, but you can also just access or assign to the \texttt{value} property on the variable. So if you want to set a variable named \lstinline|var| to 1.2, you would use either the C++ compatible expression \lstinline|val.setValue(1.2)| or the more Pythonic expression \lstinline|val.value = 1.2|. You can also use many of the built in features of Python on GooFit objects directly, such as printing, lengths, indexing, and more.
+On top of this, some ``Pythonizations'' have been added; a term popular in the Python community for customizing the bindings to allow the user to write code that looks simple and clear and more Pythonic. An example of such a feature is setting the value of a Variable. In C++, you call methods for setting and getting a variable's values using \texttt{setValue} and \texttt{getValue}. You can do this in Python as well, but you can also just access or assign to the \texttt{value} property on the variable. So if you want to set a variable named \lstinline|var| to 1.2, you would use either the C++ compatible expression \lstinline|val.setValue(1.2)| or the more Pythonic expression \lstinline|val.value = 1.2|. You can also use many of the built in features of Python on GooFit objects directly, such as printing, lengths, indexing, and more.
 
 Several methods have been added to make it easy to convert events to and from Numpy arrays. The user can choose to filter out-of-range values during the conversion.There are also utilities to extract interesting quantities, evaluations, and caches from GooFit into Numpy arrays. 
 
@@ -284,7 +284,8 @@ Examples were added in Python for this new functionality, using Jupyter notebook
 
 \subsection{Documentation}
 
-Documentation for GooFit has been improved and integrated with the Python bindings. Most PDFs have relevant documentation covering the mathematics that have been implemented. This is picked up by the Doxygen parser, and included in the online API documentation for the C++ code. The same documentation is also exported to the Python bindings, and gets rendered into HTML with math intact inside a Jupyter notebook if you display a PDF class. This extraction was done in CMake by selecting the Doxygen style comments, printing them out into new generated headers, and giving that to the Python bindings.
+Documentation for GooFit has been improved and integrated with the Python bindings. Most PDFs have relevant documentation covering the mathematics that have been implemented. This is picked up by the Doxygen parser, and included in the online API documentation for the C++ code. The same documentation is also exported to the Python bindings, and gets rendered into HTML with math intact inside a Jupyter notebook if you display a PDF class. This extraction was done in CMake by selecting the Doxygen
+style comments, printing them out into new generated headers, and giving that to the Python bindings. No external dependencies are required; all scripting is done directly in CMake.
 
 \section{The New Indexing System}
 \label{sec-ind}
@@ -458,7 +459,7 @@ A comparison between the native C++ GooFit model description file and the AmpGen
 \label{sec-summary}
 
 Three key improvements make GooFit 2.1 and 2.2 easier to use and more powerful. First, the new Python bindings allow users to access GooFit from the popular Python interpreter. This makes it easier to compose models quickly, manipulate them from scripts, and interact with the scientific Python software ecosystem.
-GooFit's internal indexing system was replaced, making it simper to compose new PDFs and eliminating some common classes of mistakes for new developers. It provided a performance benefit for GPUs, and gives the GooFit core developers more flexibility for further improvements in the future.
+GooFit's internal indexing system was replaced, making it simpler to compose new PDFs and eliminating some common classes of mistakes for new developers. It provided a performance benefit for GPUs, and gives the GooFit core developers more flexibility for further improvements in the future.
 Finally, the new DecayLanguage provides interoperability with the AmpGen package, with more packages possible in the future. This is in early stages, but provides great potential for future developments.
 
 %For one-column wide figures use syntax of figure~\ref{fig-1}
