@@ -429,16 +429,16 @@ An additional change provided with the indexing update is the ParameterContainer
 	\legend{2.0 GPU,2.2 GPU,2.0 CPU,2.2 CPU}
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Comparison of GooFit 2.0 vs GooFit 2.2 on a Dual Xeon E5-2680 with 28 cores running at 2.4 Ghz, with an NVIDIA P100 GPU. Performance gains can be seen on the GPUs when upgrading to the new indexing system in GooFit 2.2, along with slight CPU penalties.}
+	\caption{Comparison of GooFit 2.0 vs GooFit 2.2 on a Dual Xeon E5-2680 with 28 cores running at 2.4 Ghz, with an NVIDIA P100 GPU. Performance gains can be seen on the GPUs when upgrading to the new indexing system in GooFit 2.2, along with a CPU penalty.}
 		\label{figure-newindexspeed}
 \end{figure}
 
-Figure \ref{figure-newindexspeed} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. The 3-body decay improved runtime by 32\% with GooFit 2.2 and over 9 million events.
+Figure \ref{figure-newindexspeed} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. The complete 3-body decay runtime improved by 32\% with GooFit 2.2 and over 9 million events.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.5\textwidth]{LineExample}
-	\caption{Example of a single $D_0 \rightarrow K^{-} \pi^{+} \pi^{+} \pi^{-}$ decay using DecayLanugage's line display feature on an AmpGen line (shown at the top).}
+	\caption{Example of a single $D_0 \rightarrow K^{-} \pi^{+} \pi^{+} \pi^{-}$ decay using DecayLanugage's line display feature on an AmpGen line (syntax of an Ampgen shown at the top).}
 		\label{fig-ampgen}
 \end{figure}
 
@@ -447,12 +447,25 @@ Figure \ref{figure-newindexspeed} provides a performance comparison between the 
 
 GooFit has preliminary support for decays written in the DecayLanguage syntax as implemented in AmpGen \cite{lib:AmpGen}, primarily implemented as a standalone Python package in the SciKit-HEP organization \cite{org:scikithep}.
 
-AmpGen is a tool for compiling amplitudes for use in the LHCb event generator. It is also available as a stand-alone package apart from the LHCb framework. It builds PDFs symbolically in C++, then converts them to a C file that can be compiled into a simple library. However, it also provides a clean, powerful grammar for describing decays.
+AmpGen is a tool for compiling amplitudes for use in the LHCb event generator. It is also available as a stand-alone package apart from the LHCb framework. It builds PDFs symbolically in C++, then converts them to a C file that can be compiled into a simple library. However, it also provides a clean, powerful grammar for describing decays. See figure~\ref{fig-ampgencode} for an example of the syntax.
 
 To make this language a general one that can be used across packages like GooFit, a new decay language parser was built in Python called DecayLanguage framework and released in Beta form. This implements an AmpGen compatible syntax, but is designed to produce code for other systems; the first implementation is provided, and produces C++ GooFit code. It also produces diagrams of lines in a Jupyter notebook, such as the one shown in figure~\ref{fig-ampgen}.
 
 A comparison between the native C++ GooFit model description file and the AmpGen file for a similar decay, the  $D^0\rightarrow K^{\mp} \pi^{\pm} \pi^{\pm} \pi^{\mp}$ model \cite{paper:kthreepi}, takes 1,314 lines to describe in GooFit but only 222 lines as AmpGen grammar. The AmpGen grammar maps directly onto the physics description of the model, with one line per decay or parameter, while the GooFit code is tied up in managing memory and building C++ structures. Once converted to GooFit code by DecayLanguage, the resulting code is very similar to the handwritten code, but with helpful comments containing descriptions of the decay, and provides identical performance.
 
+\begin{figure}[h]
+\begin{lstlisting}[numbers=left]
+EventType D0 K0S0 pi+ pi-
+
+D0{K0S0,rho(770)0{pi+,pi-}}           2  1.000  0.00  2     0.0 0.0
+D0{K*(892)bar-{K0S0,pi-},pi+}         0  1.740  0.01  0   139.0 0.3
+
+K(0)*(1430)bar-_mass                  2  1.463  0.002
+K(0)*(1430)bar-_width                 2  0.233  0.005
+\end{lstlisting}
+    \caption{Example of the AmpGen syntax. This is for a $D^0 \rightarrow K_S^0 \pi^+ \pi^-$ decay. Line 1 is the event type declaration. Lines 3-4 show example decay channels. Lines 6-8 show parameter definitions. Numbers are in groups of three: the first digit is 0 for free, 2 for fixed. The second number is the value, the third is the uncertainty.}
+\label{fig-ampgencode}
+\end{figure}
 
 
 \section{Summary}
