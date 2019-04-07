@@ -416,11 +416,13 @@ An additional change provided with the indexing update is the ParameterContainer
 		(2,45.358)
 		(3,29.275)
 	};
+    % 2.0 CPU
 	\addplot coordinates {
 		(1,51.99)
 		(2,235.69)
 		(3,52.223)
 	};
+    % 2.2 CPU
 	\addplot coordinates {
 		(1,59.615)
 		(2,269.16)
@@ -429,11 +431,11 @@ An additional change provided with the indexing update is the ParameterContainer
 	\legend{2.0 GPU,2.2 GPU,2.0 CPU,2.2 CPU}
 	\end{axis}
 	\end{tikzpicture}
-	\caption{Comparison of GooFit 2.0 vs GooFit 2.2 on a Dual Xeon E5-2680 with 28 cores running at 2.4 Ghz, with an NVIDIA P100 GPU. Performance gains can be seen on the GPUs when upgrading to the new indexing system in GooFit 2.2, along with a CPU penalty.}
+	\caption{Comparison of GooFit 2.0 vs GooFit 2.2 on a Dual Xeon E5-2680 with 28 cores running at 2.4 Ghz, with an NVIDIA P100 GPU. Performance gains can be seen on the GPUs when upgrading to the new indexing system in GooFit 2.2. A penalty can be seen for the CPU version; CPU optimizations could be added in the future but were not considered a priority for now.}
 		\label{figure-newindexspeed}
 \end{figure}
 
-Figure \ref{figure-newindexspeed} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. The complete 3-body decay runtime improved by 32\% with GooFit 2.2 and over 9 million events.
+Figure \ref{figure-newindexspeed} provides a performance comparison between the old indexing system in GooFit 2.0 and the new indexing system found in GooFit 2.2 by calculating a 3-body decay. The results are captured on a Dual Xeon E5-2680 with 28 cores and an NVIDIA Tesla P100 GPU. The complete 3-body decay runtime improved by over 30\% with GooFit 2.2 and over 9 million events on the GPU (``Dalitz'' example, far right plot in figure \ref{figure-newindexspeed}).
 
 \begin{figure}[ht]
 	\centering
